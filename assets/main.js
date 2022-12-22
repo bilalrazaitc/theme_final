@@ -266,6 +266,6 @@ collage_overlay.forEach(function(overlay){
             console.log("val", e.target.value);
         }
         else{
-            console.log("empty");
+            console.log("empty ");
         }
     }, 500));
