@@ -1,0 +1,31 @@
+{% capture srcset %}
+{{ image | img_url: '50x' }} 50w,
+{{ image | img_url: '100x' }} 100w,
+{{ image | img_url: '200x' }} 200w,
+{{ image | img_url: '300x' }} 300w,
+{{ image | img_url: '400x' }} 400w,
+{{ image | img_url: '600x' }} 600w,
+{{ image | img_url: '700x' }} 700w,
+{{ image | img_url: '800x' }} 800w,
+{{ image | img_url: '900x' }} 900w,
+{{ image | img_url: '1000x' }} 1000w,
+{{ image | img_url: '1100x' }} 1100w,
+{{ image | img_url: '1200x' }} 1200w,
+{{ image | img_url: '1300x' }} 1300w,
+{{ image | img_url: '1400x' }} 1400w,
+{{ image | img_url: '1500x' }} 1500w,
+{{ image | img_url: '1600x' }} 1600w,
+{{ image | img_url: '1700x' }} 1700w,
+{{ image | img_url: '1800x' }} 1800w,
+{{ image | img_url: '1900x' }} 1900w,
+{{ image | img_url: '2000x' }} 2000w
+{% endcapture %}
+<img 
+alt="{{ alt }}"
+data-sizes="auto"
+data-image-id="{{ image.id }}"
+src="{{ image | img_url: '50x' }}"
+data-srcset="{{ srcset }}"
+alt="{{ image.alt }}"
+class="{{class}} lazyload"
+style="{{style}}">

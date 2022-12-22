@@ -1,0 +1,294 @@
+let drawer = document.querySelector("[data-cart-drawer]");
+let drawer_total_wrapper = document.querySelector("[data-cart-drawer-total-wrapper]");
+let drawer_total = document.querySelector("[data-cart-drawer-total]");
+let drawer_count = document.querySelector("[data-cart-drawer-count]");
+let drawer_overlay = document.querySelector(".cart-drawer__overlay");
+let drawer_ajax = document.querySelector("[data-cart-drawer-ajax]");
+let drawer_close = document.querySelector("[data-cart-drawer-close]");
+let drawer_remove = document.querySelector("[data-cart-drawer-remove]");
+let drawer_apply = document.querySelector("[data-cart-drawer-apply]");
+let drawer_checkout = document.querySelector("[data-cart-drawer-checkout]");
+let drawer_discount = document.querySelector("[data-cart-drawer-discount]");
+let dicountEvents = ["change", "input", "paste"];
+let drawerBarLine = document.querySelector("[data-cart-drawer-bar-line]");
+let drawerBarWrapper = document.querySelector("[data-cart-drawer-bar-text]")
+let drawer_cart_level_discount = document.querySelector(".cart-drawer__footer-subtotal em");
+
+for(dicountEvent of dicountEvents){
+    drawer_discount.addEventListener(dicountEvent, e => {
+        let val = "/checkout?discount=" + e.target.value;
+        drawer_apply.setAttribute("href", val);
+        drawer_checkout.setAttribute("href", val);
+    });
+}
+
+drawer_close.addEventListener("click", () => {
+    drawer.classList.remove("active");
+    drawer_overlay.style.display = "none";
+});
+
+let cartUpdateTotal = (price, count) => {
+    drawer_total.innerText = Shopify.formatMoney(price);
+    drawer_count.innerText = count;
+}
+
+let drawerBarUpdate = price => {
+    let drawerBarMaxPrice = +drawerBarWrapper.dataset.price;
+    let drawerBarPercentage = price / drawerBarMaxPrice * 100;
+    drawerBarWrapper.innerHTML = (price >= drawerBarMaxPrice) ? "{{ settings.drawer_bar_success }}" :`{{ settings.drawer_bar_prefix }}<span>${Shopify.formatMoney(drawerBarMaxPrice - price)}</span>{{ settings.drawer_bar_postfix }}`;
+    drawerBarPercentage = drawerBarPercentage >= 100 ? 100 : drawerBarPercentage;
+    drawerBarLine.setAttribute("style", `width: ${drawerBarPercentage}%`);
+}
+
+
+
+let cartItemGrid = (item, index, disc) => {
+    let original_price = item.original_line_price != item.final_line_price ? `<strike>${Shopify.formatMoney(item.original_line_price)}</strike> ${Shopify.formatMoney(item.final_line_price)}` : `${Shopify.formatMoney(item.original_line_price)}`;
+    let discounts = "";
+    let properties = "";
+    if(disc){
+    if(item.discounts.length > 0){
+        for(let d=0; d<item.discounts.length; d++){
+            discounts += item.discounts[d].title
+        }
+    }
+}
+        for(let key in item.properties){
+            if(key[0] != "_" && item.properties[key] != ""){
+if(item.properties[key].indexOf("/uploads/") != -1){
+    properties += `<li><strong>${key}</strong>: <a href="${item.properties[key]}" target="_blank">${item.properties[key].split("/")[item.properties[key].split("/").length - 1]}</a></li>`;
+}
+else{
+    properties += `<li><strong>${key}</strong>: ${item.properties[key]}</li>`;
+}
+            
+            }
+        }
+    console.warn(item.properties, properties);
+    return `<div class="cart-drawer__grid" data-item-id="${index}">
+                <div class="cart-drawer__grid-image">
+                    <img src="${ item.featured_image != null ? item.featured_image.url + '&width=140' : '' }" />
+                </div>
+                <div class="cart-drawer__grid-details">
+                    <span class="cart-drawer__grid--remove" data-cart-drawer-remove>&#10005;</span>
+                    <a href="{{ item.product.url }}" class="cart-drawer__grid-produt-title">${ item.product_title }</a>
+                    <p class="cart-drawer__grid-variant-title">${ item.variant_title }</p>
+                    ${properties != "" ? `<ul class="cart-drawer__grid-properties">${properties}</ul>` : ""}
+                    ${discounts != "" ? `<p class="cart-drawer__grid-discount">
+                    <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 12 12">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z" fill="currentColor">
+</path></svg>
+${discounts}</p>` : ""}
+                    <div class="cart-drawer__grid-data">
+                    <div class="cart-drawer__grid-quantity-wrapper">
+                        <span class="cart-drawer__grid-quantity--minus" data-cart-drawer-minus>-</span>
+                        <input type="number" value="${item.quantity}" class="cart-drawer__grid-quantity-input" />
+                        <span class="cart-drawer__grid-quantity--plus" data-cart-drawer-plus>+</span>
+                    </div>
+                    <div class="cart-drawer__grid-price">
+                    ${original_price}
+                    </div>
+                    <span class="cart-drawer__grid-error" data-cart-drawer-error></span>
+                    </div>
+                </div>
+            </div>`;
+}
+
+
+let cartRefresh = () => {
+    drawer.classList.add("active");
+    drawer_overlay.style.display = "block";
+    fetch('/cart.js')
+    .then(cart => cart.json())
+    .then(cart => {
+      let cartItems = ``;
+      cartUpdateTotal(cart.total_price, cart.item_count);
+      drawerBarUpdate(cart.total_price);
+      let disc = true;
+      let cart_disc = ``;
+      if(cart.cart_level_discount_applications.length > 0){
+        disc = false;
+        for(let d=0; d<cart.cart_level_discount_applications.length; d++){
+            cart_disc += `<svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 12 12">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z" fill="currentColor">
+          </path></svg> ${cart.cart_level_discount_applications[d].title} -(${Shopify.formatMoney(cart.cart_level_discount_applications[d].total_allocated_amount)})`;
+        }
+      }
+      drawer_cart_level_discount.innerHTML = cart_disc;
+      
+      let i = 1;
+      for(item of cart.items){
+        cartItems += cartItemGrid(item, i, disc);
+        i++;
+      }
+      return cartItems;
+      })
+      .then(grid => {
+        drawer_ajax.innerHTML = grid;
+      });
+  }
+
+
+let cartUpdate = cart => {
+    let cartItems = ``;
+    let i = 1;
+    let disc = true;
+    let cart_disc = ``;
+    if(cart.cart_level_discount_applications.length > 0){
+      disc = false;
+      for(let d=0; d<cart.cart_level_discount_applications.length; d++){
+          cart_disc += `<svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 12 12">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z" fill="currentColor">
+        </path></svg> ${cart.cart_level_discount_applications[d].title} -(${Shopify.formatMoney(cart.cart_level_discount_applications[d].total_allocated_amount)})`;
+      }
+    }
+    drawer_cart_level_discount.innerHTML = cart_disc;
+    for(item of cart.items){
+      cartItems += cartItemGrid(item, i, disc);
+      i++;
+    }
+    cartUpdateTotal(cart.total_price, cart.item_count);
+    drawerBarUpdate(cart.total_price);
+    if(cart.item_count == 0){
+        drawer_ajax.innerHTML = '<div class="cart-drawer__content-empty">Your cart is empty!</div>';
+    }
+    else{
+        drawer_ajax.innerHTML = cartItems;
+    }   
+}
+
+
+  document.addEventListener("click", e => {
+    if(e.target.hasAttribute("data-cart-drawer-remove")){
+        let id = +e.target.closest(".cart-drawer__grid").getAttribute("data-item-id").trim();  
+        let data = {line: id, quantity: 0};
+        fetch('/cart/change.js', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+            'Content-type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response.status){
+                throw new Error("Something went wrong!");
+            }
+            else{
+                cartUpdate(response);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+});
+
+let drawerUpdateQuantity = (data, currentId, currentQuantity, input) => {
+    drawer_total_wrapper.classList.add("active");
+    let priceWrapper = input.closest(".cart-drawer__grid-data").querySelector(".cart-drawer__grid-price");
+    priceWrapper.classList.add("active");
+    fetch('/cart/change.js', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(cart => {
+        if(cart.status){
+          throw new Error("Update Quantity");
+        }
+        if(cart.item_count == currentQuantity){
+            let errorDiv = input.closest(".cart-drawer__grid-data").querySelector(".cart-drawer__grid-error");
+            input.value = cart.items[currentId - 1].quantity;
+            errorDiv.innerText = `You can only add ${cart.items[currentId - 1].quantity} of this item to your cart.`;
+            errorDiv.style.display = "block";
+            setTimeout(() => {
+            errorDiv.style.display = "none";
+            }, 2500)
+        }
+        else{
+            cartUpdate(cart);
+        }
+    })
+    .catch(function(error){
+      console.log(error);
+    })
+    .finally(function(){
+        drawer_total_wrapper.classList.remove("active");
+        priceWrapper.classList.remove("active");
+    });
+}
+  
+document.addEventListener("change", e => {
+    if(e.target.classList.contains("cart-drawer__grid-quantity-input")){
+        let id = +e.target.closest(".cart-drawer__grid").dataset.itemId;
+        let quantityInput = e.target;
+        let val = +quantityInput.value;
+        let totalCount = +e.target.closest(".cart-drawer__wrapper").querySelector("[data-cart-drawer-count]").innerText;
+        let data = {line: id, quantity: val};
+        drawerUpdateQuantity(data, id, totalCount, quantityInput);
+    }
+});
+
+document.addEventListener("click", e => {
+    if(e.target.hasAttribute("data-cart-drawer-plus") || e.target.hasAttribute("data-cart-drawer-minus")){
+        let id = +e.target.closest(".cart-drawer__grid").dataset.itemId;
+        let quantityInput = e.target.closest(".cart-drawer__grid-quantity-wrapper").querySelector(".cart-drawer__grid-quantity-input");
+        let quantity = +quantityInput.value;
+        let val = 0;
+        if(e.target.hasAttribute("data-cart-drawer-plus")){
+            val = quantity + 1;
+        }
+        else if(e.target.hasAttribute("data-cart-drawer-minus")){
+            if(quantity >= 2){
+                val = quantity - 1;
+            }
+        }
+        let totalCount = +e.target.closest(".cart-drawer__wrapper").querySelector("[data-cart-drawer-count]").innerText;
+        let data = {line: id, quantity: val};
+        drawerUpdateQuantity(data, id, totalCount, quantityInput);
+    }
+});
+  
+
+
+let forms = document.querySelectorAll('form[action="/cart/add"]');
+forms.forEach(function(form){
+    form.addEventListener("submit", function(e){
+        e.preventDefault();
+        let data = new URLSearchParams(new FormData(form));
+        fetch('/cart/add.js', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response.status){
+                form.querySelectorAll("span").forEach(item => {
+                if(item.hasAttribute("data-cart-drawer-error") || item.hasAttribute("data-product-form-error")){
+                    item.innerText = response.description;
+                    item.classList.add("active");
+                    if(item.hasAttribute("data-cart-drawer-error")){
+                    setTimeout(() => {
+                        item.classList.remove("active");
+                    }, 2500);
+                    }
+                }
+                });
+            }
+            else{
+                cartRefresh();
+            }
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+    });
+});

@@ -1,0 +1,330 @@
+<div class="collage">
+    <div class="collage__container">
+        <div class="collage__flex-container">
+            <div class="collage__flex-item">
+                <div class="collage__flex-item-content">
+                    {% if section.settings.image_1 %}
+                    {{ section.settings.image_1 | image_url: width: 800 | image_tag: class:'lazyload' }}
+                    {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                    {% endif %}
+                    <a href="{{ section.settings.link_1 | default: '#' }}" class="collage__overlay">
+                        {{ section.settings.title_1 }}
+                    </a>
+                    <div class="collage__text">
+                        {{ section.settings.text_1 }}
+                    </div>
+                </div>
+            </div>
+            <div class="collage__flex-item">
+                <div class="collage__flex-item-content">
+                    {% if section.settings.image_2 %}
+                    {{ section.settings.image_2 | image_url: width: 800 | image_tag: class:'lazyload' }}
+                    {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                    {% endif %}
+                    <a href="{{ section.settings.link_2 | default: '#' }}" class="collage__overlay">
+                        {{ section.settings.title_2 }}
+                    </a>
+                    <div class="collage__text">
+                        {{ section.settings.text_2 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collage__featured-container">
+            <div class="collage__featured-item">
+                <div class="collage__featured-item-content">
+                    {% if section.settings.image_1 %}
+                    <img src="{{ section.settings.image_1 | img_url: '800x' }}" class="lazyload collage__featured-image" alt="">
+                    {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                    {% endif %}
+                    <a href="{{ section.settings.link_1 | default: '#' }}" class="collage__featured-overlay">
+                        <span class="collage__featured-title">{{ section.settings.title_1 }}</span>
+                        <span class="collage__featured-text">{{ section.settings.text_1 }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collage__flex-container">
+            <div class="collage__flex-item">
+                <div class="collage__flex-item-content">
+                    {% if section.settings.image_3 %}
+                    {{ section.settings.image_3 | image_url: width: 800 | image_tag: class:'lazyload' }}
+                    {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                    {% endif %}
+                    <a href="{{ section.settings.link_3 | default: '#' }}" class="collage__overlay">
+                        {{ section.settings.title_3 }}
+                    </a>
+                    <div class="collage__text">
+                        {{ section.settings.text_3 }}
+                    </div>
+                </div>
+            </div>
+            <div class="collage__flex-item">
+                <div class="collage__flex-item-content">
+                    {% if section.settings.image_4 %}
+                    {{ section.settings.image_4 | image_url: width: 800 | image_tag: class:'lazyload' }}
+                    {% else %}
+                    {{ 'image' | placeholder_svg_tag }}
+                    {% endif %}
+                    <a href="{{ section.settings.link_4 | default: '#' }}" class="collage__overlay">
+                        {{ section.settings.title_4 }}
+                    </a>
+                    <div class="collage__text">
+                        {{ section.settings.text_4 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.collage{
+padding: 45px;
+}
+.collage__container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+} 
+.collage__flex-container{
+flex: 0 0 25%;
+}
+.collage__flex-item{
+display: block;
+padding: 5px;
+}
+.collage__flex-item-content{
+position: relative;
+}
+.collage__flex-item-content img{
+    height: 22vw;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+.collage__flex-item-content svg{
+    background: #dfdfdf;
+    display: block;
+}
+.collage__overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #0000003b;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    text-decoration: none;
+    color: transparent;
+    font-size: 18px;
+    padding: 15px;
+}
+.collage__text{
+    display: none;
+}
+.collage__featured-container{
+    flex: 0 0 50%;
+}
+.collage__featured-item{
+padding: 5px;
+}
+.collage__featured-item-content{
+position: relative;
+}
+.collage__featured-item-content svg{
+    background: #dfdfdf;
+    display: block;
+}
+.collage__featured-image{
+    height: calc(44vw + 10px);
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+.collage__featured-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #0000003b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 35px;
+}
+.collage__featured-overlay::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    border: 2px solid white;
+    transform: translate(-50%, -50%);
+}
+.collage__featured-title{
+
+}
+.collage__featured-text{
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 992px){
+    .collage__featured-container{
+        order: 3;
+        flex: 0 0 100%;
+    }
+    .collage__flex-container{
+        flex: 0 0 50%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .collage__flex-item{
+        width: 50%;
+    }
+    .collage__featured-image{
+        height: auto;
+        min-height: 350px;
+    }
+}
+@media screen and (max-width: 767px){
+    .collage{
+        padding: 25px;
+    }
+    .collage__featured-text{
+        font-size: 14px;
+    }
+}
+</style>
+
+
+{% schema %}
+{
+    "name": "Collage",
+   "settings": [
+   {
+    "type": "header",
+    "content": "First Image"
+},
+   {
+    "type": "image_picker",
+    "id": "image_1",
+    "label": "Image"
+},
+{
+    "type": "url",
+    "id": "link_1",
+    "label": "Link"
+},
+   {
+    "type": "text",
+    "id": "title_1",
+    "label": "Title",
+    "default": "Your title here"
+},
+{
+    "type": "textarea",
+    "id": "text_1",
+    "label": "Text",
+    "default": "Your text here"
+},
+{
+    "type": "header",
+    "content": "Second Image"
+},
+   {
+    "type": "image_picker",
+    "id": "image_2",
+    "label": "Image"
+},
+{
+    "type": "url",
+    "id": "link_2",
+    "label": "Link"
+},
+   {
+    "type": "text",
+    "id": "title_2",
+    "label": "Title",
+    "default": "Your title here"
+},
+{
+    "type": "textarea",
+    "id": "text_2",
+    "label": "Text",
+    "default": "Your text here"
+},
+{
+    "type": "header",
+    "content": "Third Image"
+},
+   {
+    "type": "image_picker",
+    "id": "image_3",
+    "label": "Image"
+},
+{
+    "type": "url",
+    "id": "link_3",
+    "label": "Link"
+},
+   {
+    "type": "text",
+    "id": "title_3",
+    "label": "Title",
+    "default": "Your title here"
+},
+{
+    "type": "textarea",
+    "id": "text_3",
+    "label": "Text",
+    "default": "Your text here"
+},
+{
+    "type": "header",
+    "content": "Fourth Image"
+},
+   {
+    "type": "image_picker",
+    "id": "image_4",
+    "label": "Image"
+},
+{
+    "type": "url",
+    "id": "link_4",
+    "label": "Link"
+},
+   {
+    "type": "text",
+    "id": "title_4",
+    "label": "Title",
+    "default": "Your title here"
+},
+{
+    "type": "textarea",
+    "id": "text_4",
+    "label": "Text",
+    "default": "Your text here"
+}
+   ],
+  "presets": [
+    {
+        "name":"Collage"
+    }
+  ]
+}
+{% endschema %}

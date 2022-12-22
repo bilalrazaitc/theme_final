@@ -1,0 +1,72 @@
+<div class="product-card__wrapper">
+<div class="product-card">
+<div class="product-card__media-wrapper product-card--loading">
+  <div class="product-card__media product-card--progress">
+    {% render 'responsive-image', image: product.featured_image, alt: product.featured_image.alt, class: 'product-card__media-image' %}
+    {% for variant in product.variants %}
+    {% if variant.image %}
+    {% render 'responsive-image', image: variant.image, alt: variant.image.alt, class: 'product-card__media-image', style: 'display: none' %}
+    {% endif %}
+    {% endfor %}
+    {% unless product.has_only_default_variant %}
+    <div class="product-card__swatch__wrapper">
+      {% for product_option in product.options_with_values %}
+      {% assign option_index = forloop.index %}
+      {% assign option_title = product_option.name | downcase | strip %}
+      {% unless option_title == 'color' or option_title == 'colors' or option_title == 'colour' or option_title == 'colours' %}
+      <div class="product-card__swatch__content">
+        {% for value in product_option.values %}
+        <input id="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}" name="{{option_title | handleize}}-{{product.id}}" type="radio" value="{{ value }}" class="product-card__swatch" data-option="option{{ option_index }}" {% if product_option.selected_value == value %}checked{% endif %} hidden />
+        <label for="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}" class="product-card__swatch-label {% if forloop.first and product_option.values.size > 1 %}product-card__swatch-label-left{% endif %} {% if forloop.last and product_option.values.size > 1 %}product-card__swatch-label-right{% endif %} {% if forloop.first and product_option.values.size == 1 %}product-card__swatch-label-left{% endif %} {% if forloop.first and product_option.values.size == 1 %}product-card__swatch-label-right{% endif %}">{{ value }}</label>
+        {% endfor %}
+      </div>
+      {% endunless %}
+      {% endfor %}
+      </div>
+    {% endunless %}
+  </div>
+</div>
+
+  <div class="product-card__content">
+    <a href="{{ product.url }}" class="product-card__title">{{ product.title }}</a>
+    <p class="product-card__price">
+      {% if product.price != blank and product.price > 0 %}
+      <span class="product-card__regular-price">{{ product.price | money }}</span>
+      {% if product.compare_at_price != blank and product.compare_at_price > product.price %}
+      <span class="product-card__sale-price">{{ product.compare_at_price | money }}</span>
+      {% endif %}
+      {% endif %}
+      </p>
+      <div class="product-card__color-swatch__wrapper">
+      {% unless product.has_only_default_variant %}
+      {% for product_option in product.options_with_values %}
+      {% assign option_index = forloop.index %}
+      {% assign option_title = product_option.name | downcase | strip %}
+      {% if option_title == 'color' or option_title == 'colors' or option_title == 'colour' or option_title == 'colours' %}
+        {% for value in product_option.values %}
+        <input id="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}" name="{{option_title | handleize}}-{{product.id}}" type="radio" value="{{ value }}" class="product-card__swatch" data-option="option{{ option_index }}" {% if product_option.selected_value == value %}checked{% endif %} hidden />
+        <label for="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}" class="product-card__color-swatch-label" style="background-color: {{ value | downcase | strip }}"></label>
+        {% endfor %}
+      {% endif %}
+      {% endfor %}
+      {% endunless %}
+      </div>
+  </div>
+  {% form 'product', product, class: 'product-card__form' %}
+  <select id="{{ product.handle }}" name="id" hidden>
+  {% for variant in product.variants %}
+    <option value="{{ variant.id }}"
+      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+    >
+      {{ variant.title }} - {{ variant.price | money }}
+    </option>
+  {% endfor %}
+</select>
+                <input name="quantity" value="1" hidden/>
+                <button type="submit" data-instock="Add to Cart" data-soldout="Sold Out" class="btn btn--primary product-card--submit">
+                  {% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
+                </button>
+  {% endform %}
+
+</div>
+</div>

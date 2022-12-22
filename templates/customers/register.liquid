@@ -1,0 +1,57 @@
+<div class="register">
+    <div class="register__wrapper">
+        {%- form 'create_customer', class: 'register__form', novalidate: 'novalidate' -%}
+            {%- if form.posted_successfully? -%}
+        <h2 class="main-contact__form--success">{% render 'icon-success' %} {{ 'templates.contact.form.post_success' | t }}</h2>
+      {%- endif -%}
+      <div class="field">
+        <div class="field__group">
+            <label for="contact-email" class="field__label">First name</label>
+            <input
+              id="contact-email"
+              type="text"
+              name="customer[first_name]"
+              value=""
+              class="field__input" />
+        </div>
+        <div class="field__group">
+          <label for="contact-phone" class="field__label">Last name</label>
+          <input
+            id="contact-phone"
+            type="text"
+            name="customer[last_name]"
+            value=""
+            class="field__input" />
+        </div>
+        <div class="field__group">
+            <label for="contact-phone" class="field__label">Email</label>
+            <input
+              id="contact-phone"
+              type="email"
+              name="customer[email]"
+              value=""
+              class="field__input" />
+          </div>
+          <div class="field__group">
+            <label for="contact-phone" class="field__label">Password</label>
+            <input
+              id="contact-phone"
+              type="email"
+              name="customer[password]"
+              value=""
+              class="field__input" />
+          </div>
+        <div class="field__group">
+          <button type="submit" class="btn btn--primary btn--block">Create</button>
+        </div>
+      </div>
+        {%- endform -%}
+    </div>
+</div>
+
+<style>
+    .register__form{
+        max-width: 600px;
+        margin: 0 auto;
+    }
+</style>

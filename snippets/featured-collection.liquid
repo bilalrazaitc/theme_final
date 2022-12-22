@@ -1,0 +1,248 @@
+<style>
+    .featured-collection__flex{
+    position: relative;
+    }
+    #circle {
+         width: 170px;
+        height: 170px;
+        overflow: hidden;
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        }
+        .circle-sale {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    #circle text { font-family: 'Helvetica Neue', Arial; font-size: 16px; font-weight: bold; }
+    
+    #circle svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+    
+      -webkit-animation-name: rotate;
+         -moz-animation-name: rotate;
+          -ms-animation-name: rotate;
+           -o-animation-name: rotate;
+              animation-name: rotate;
+      -webkit-animation-duration: 5s;
+         -moz-animation-duration: 5s;
+          -ms-animation-duration: 5s;
+           -o-animation-duration: 5s;
+              animation-duration: 5s;
+      -webkit-animation-iteration-count: infinite;
+         -moz-animation-iteration-count: infinite;
+          -ms-animation-iteration-count: infinite;
+           -o-animation-iteration-count: infinite;
+              animation-iteration-count: infinite;
+      -webkit-animation-timing-function: linear;
+         -moz-animation-timing-function: linear;
+          -ms-animation-timing-function: linear;
+           -o-animation-timing-function: linear;
+              animation-timing-function: linear;
+    }
+    
+    @-webkit-keyframes rotate {
+        from { -webkit-transform: rotate(360deg); }
+        to { -webkit-transform: rotate(0); }
+    }
+    @-moz-keyframes rotate {
+        from { -moz-transform: rotate(360deg); }
+        to { -moz-transform: rotate(0); }
+    }
+    @-ms-keyframes rotate {
+        from { -ms-transform: rotate(360deg); }
+        to { -ms-transform: rotate(0); }
+    }
+    @-o-keyframes rotate {
+        from { -o-transform: rotate(360deg); }
+        to { -o-transform: rotate(0); }
+    }
+    @keyframes rotate {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0); }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .featured-collection{
+    
+    }
+    .featured-collection__container{
+    padding: 50px 45px;
+    }
+    .featured-collection__container h2{
+        padding: 0 10px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    .featured-collection__flex-container{
+    /* display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+      scrollbar-width: none; */
+    }
+    .featured-collection__flex-container::-webkit-scrollbar {
+      display: none;
+    }
+    .featured-collection__flex-item{
+    /* flex: 0 0 25%;
+    position: relative;
+    left: 0;
+    transition: all 0.3s ease-in-out; */
+    width: 25%;
+    }
+    .featured-collection__flex-item-content{
+    padding: 5px;
+    }
+    .featured-collection__image{
+    position: relative;
+    overflow: hidden;
+    }
+    .featured-collection__image img{
+        /* height: 20vw; */
+        object-fit: cover;
+    }
+    .featured-collection__swatch-container{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffffe6;
+    display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.5s;
+    }
+    .featured-collection__swatch-item{
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        overflow-x: scroll;
+        /* padding: 0 20px; */
+        padding: 10px;
+        -ms-overflow-style: none;
+      scrollbar-width: none;
+      white-space: nowrap;
+    }
+    .featured-collection__swatch-item::-webkit-scrollbar {
+        display: none;
+    }
+    .featured-collection__swatch-item input{
+        display: none;
+    }
+    .featured-collection__swatch-item label{
+        display: inline-flex;
+        background-color: transparent;
+        border-radius: 4px;
+        min-height: 36px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        min-width: 36px;
+        margin: 0 5px;
+        padding: 0 10px;
+        font-size: 11px;
+        border: 1px solid #d3d3d3;
+    }
+    .featured-collection__swatch-item label:hover{
+        border-color: #545454;
+    }
+    
+    .featured-collection__swatch-item input:checked + label{
+        background-color: black;
+        color: white;
+        border-color: #545454;
+    }
+    .featured-collection__swatch-first{
+        margin-left: auto !important;
+    }
+    .featured-collection__swatch-last{
+    margin-right: auto !important;
+    }
+    .featured-collection__info{
+        padding: 20px 0;
+    }
+    .featured-collection__title{
+    text-align: center;
+    font-weight: 600;
+    margin: 0;
+    }
+    .featured-collection__price{
+    text-align: center;
+    margin: 0;
+    margin-top: 10px;
+    }
+    .form--submit{
+    width: 100%;
+    visibility: hidden;
+        opacity: 0;
+        transition: all 0.5s;
+        max-width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .featured-collection__flex-item-content:hover .featured-collection__swatch-container{
+        opacity: 1;
+        visibility: visible;
+    }
+    .featured-collection__flex-item-content:hover .form--submit{
+        opacity: 1;
+        visibility: visible;
+    }
+    .featured-collection__color{
+        border-radius: 50% !important;
+        height: 8px;
+        width: 8px;
+        min-width: 8px !important;
+        min-height: 8px !important;
+        box-shadow: 0 0 0 1px #0000004a;
+        padding: 0 !important;
+    }
+    .featured-collection__swatch-item input:checked + label.featured-collection__color{
+        box-shadow: 0 0 0 2px #333;
+    }
+    
+    @media screen and (max-width: 992px){
+        .featured-collection__flex-item{
+            position: static;
+        }
+        .featured-collection__container{
+            padding-right: 0;
+        }
+        .form--submit, .featured-collection__swatch-container{
+            visibility: visible;
+        opacity: 1;
+        }
+    }
+    
+    @media screen and (max-width: 767px){
+        .featured-collection__container{
+            padding: 50px 0px 50px 28px;
+        }
+        .featured-collection__flex-item-content{
+            padding: 2px;
+        }
+        .featured-collection__swatch-container{
+            padding-bottom: 5px;
+        }
+    }
+    </style>

@@ -1,0 +1,212 @@
+<div class="testimonial">
+    <div class="testimonial__container">
+        <h2 class="heading--underline">{{ section.settings.heading }}</h2>
+        <h3>{{ section.settings.subheading }}</h3>
+        <div class="testimonial__flex">
+          <button type="button" class="testimonial__next testimonial__btn" data-transform="0">></button>
+          <button type="button" class="testimonial__prev testimonial__btn" data-transform="0"><</button>
+        <div class="testimonial__flex-container" data-index="2" data-length="{{ section.blocks.size | plus: 1 }}">
+            {% for block in section.blocks %}
+            <div class="testimonial__flex-item" data-index="{{ forloop.index }}">
+                <img src="{{ 'quote2.png' | asset_url }}" class="testimonial__quote" />
+                <p class="testimonial__text">{{ block.settings.text }}</p>
+                <div class="testimonial__rating">
+                {% for i in (1..block.settings.rating) %}
+                {% render 'icon-star' %}
+                {% endfor %}
+                </div>
+                <img src="{{ block.settings.image | img_url: '300x' }}" class="testimonial__image" />
+            </div>
+            {% endfor %}
+            {% for block in section.blocks %}
+            {% if forloop.first %}
+            <div class="testimonial__flex-item" data-index="{{ section.blocks.size | plus: 1 }}">
+                <img src="{{ 'quote2.png' | asset_url }}" class="testimonial__quote" />
+                <p class="testimonial__text">{{ block.settings.text }}</p>
+                <div class="testimonial__rating">
+                {% for i in (1..block.settings.rating) %}
+                {% render 'icon-star' %}
+                {% endfor %}
+                </div>
+                <img src="{{ block.settings.image | img_url: '300x' }}" class="testimonial__image" />
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+
+<style>
+.testimonial__next{
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+right: 0;
+width: 50px;
+height: 50px;
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: white;
+z-index: 2;
+border-radius: 50%;
+border: 0;
+cursor: pointer;
+}
+.testimonial__prev{
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+left: 0;
+width: 50px;
+height: 50px;
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: white;
+z-index: 2;
+border-radius: 50%;
+border: 0;
+cursor: pointer;
+}
+  .testimonial__flex{
+    position: relative;
+    padding: 0 25px;
+  }
+.testimonial{
+padding: 50px 0 150px 0;
+background-color: #edede1;
+}
+.testimonial__container{
+text-align: center;
+}
+.testimonial__flex-container{
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding-top: 150px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding-bottom: 50px;
+}
+.testimonial__flex-item{
+flex: 0 0 33.33%;
+background-color: #f5f5e7;
+padding: 50px;
+position: relative;
+left: 0;
+top: 0;
+transition: all 0.3s ease-in-out;
+}
+{% for block in section.blocks %}
+.testimonial__flex-container[data-index="{{forloop.index}}"] .testimonial__flex-item[data-index="{{forloop.index}}"]{
+  background-color: #4d4d3e;
+    color: white;
+    top: -80px;
+    transform: scale(1.15);
+    z-index: 2;
+}
+{% endfor %}
+.testimonial__quote{
+    max-width: 100%;
+    height: auto;
+    width: 65px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+.testimonial__text{
+  margin-bottom: 35px;
+}
+.testimonial__rating{
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.testimonial__rating svg{
+display: inline-block;
+width: 16px;
+height: 16px;
+fill: #c0c1bc;
+margin: 0 2px;
+}
+.testimonial__image{
+  height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+</style>
+
+{% schema %}
+{
+    "name": "Testimonial",
+   "settings": [
+   {
+     "type": "text",
+     "id": "heading",
+     "label": "Heading",
+    "default": "Your heading here"
+ },
+ {
+    "type": "textarea",
+    "id": "subheading",
+    "label": "Subheading",
+   "default": "Your subheading here"
+}
+   ],
+   "blocks": [
+    {
+       "type": "block",
+       "name": "block",
+      "settings": [
+        {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+            "default": "Your text here"
+        },
+        {
+            "type": "range",
+            "id": "rating",
+            "min": 1,
+            "max": 5, 
+            "step": 1,
+            "unit": ".",
+            "label": "Stars Rating",
+            "default": 5
+          },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+      }
+      ]
+    }
+   ],
+  "presets": [
+    {
+        "name":"Testimonial",
+        "blocks": [
+          {
+            "type": "block"
+          },
+          {
+            "type": "block"
+          },
+          {
+            "type": "block"
+          }
+        ]
+    }
+  ]
+}
+{% endschema %}

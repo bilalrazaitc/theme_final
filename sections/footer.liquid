@@ -1,0 +1,358 @@
+{% assign count = 0 %}
+{% for block in section.blocks %}
+  {% if block.type == 'links' %}
+    {% assign count = count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+<footer class="footer">
+  <div class="footer__container {% if count <= 1 %}footer__container--vertical{% endif %}">
+    {% for block in section.blocks %}
+      <div class="footer__item {% if block.type == 'links' %}footer__item-linklist{% endif %}">
+        {% case block.type %}
+          {% when 'logo' %}
+            <div class="footer__logo">
+              {% if block.settings.logo %}
+                <img src="{{ block.settings.logo | img_url: '200x' }}" class="footer__logo-image"/>
+              {% else %}
+                {% if block.settings.logo_text != blank %}
+                  <h2 class="footer__logo-heading">{{ block.settings.logo_text }}
+                  </h2>
+                {% endif %}
+              {% endif %}
+
+              {% if block.settings.show_social_icons %}
+                <ul class="footer__social">
+                  {%- if settings.social_twitter_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_twitter_link }}" class="footer__social-link">
+                        {%- render 'icon-twitter' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_facebook_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_facebook_link }}" class="footer__social-link">
+                        {%- render 'icon-facebook' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_pinterest_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_pinterest_link }}" class="footer__social-link">
+                        {%- render 'icon-pinterest' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_instagram_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_instagram_link }}" class="footer__social-link">
+                        {%- render 'icon-instagram' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_tiktok_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_tiktok_link }}" class="footer__social-link">
+                        {%- render 'icon-tiktok' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_tumblr_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_tumblr_link }}" class="footer__social-link">
+                        {%- render 'icon-tumblr' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_snapchat_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_snapchat_link }}" class="footer__social-link">
+                        {%- render 'icon-snapchat' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_youtube_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_youtube_link }}" class="footer__social-link">
+                        {%- render 'icon-youtube' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- if settings.social_vimeo_link != blank -%}
+                    <li class="footer__social-item">
+                      <a href="{{ settings.social_vimeo_link }}" class="footer__social-link">
+                        {%- render 'icon-vimeo' -%}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              {% endif %}
+
+            </div>
+          {% when 'links' %}
+            {% assign menu = linklists[block.settings.menu] %}
+            <p class="footer__list-title footer__title mb--25">{{ menu.title }}
+            </p>
+            <ul class="footer__list">
+              {% for link in menu.links %}
+                <li class="footer__list-li mb--10">
+                  <a href="{{ link.url }}" class="footer__list-link">{{ link.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% when 'newsletter' %}
+            <p class="footer__newsletter-title footer__title mb--25">{% render 'icon-mail' %}
+              {{ block.settings.title }}
+            </p>
+            <div class="footer__newsletter">
+              {%- form 'customer', class: 'footer__newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="footer__newsletter-field">
+                  <input type="email" name="contact[email]" class="footer__field-input" value="{{ form.email }}" placeholder="Enter Email" required>
+                  <button type="submit" class="btn btn--primary footer__newsletter-submit">Sign Up</button>
+                </div>
+                {%- if form.errors -%}
+                  Something went wrong!
+                {%- endif -%}
+                {%- if form.posted_successfully? -%}
+                  Successfully Submitted!
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+          {% when 'richtext' %}
+            <p class="footer__richtext-title footer__title">{{ block.settings.title }}
+            </p>
+            <div class="footer__richtext">
+              {{ block.settings.richtext }}
+            </div>
+        {% endcase %}
+      </div>
+    {% endfor %}
+  </div>
+</footer>
+<style>
+
+  .footer__logo {}
+  .footer__logo-image {}
+  .footer__logo-heading {
+    margin: 0;
+    padding-bottom: 25px;
+  }
+  .footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+  }
+  .footer__social-item {
+    width: 20px;
+    height: 20px;
+    margin-right: 40px;
+    margin-bottom: 25px;
+  }
+  .footer__social-item:last-child {
+    margin-right: 0;
+  }
+  .footer__social-link {}
+
+
+  .footer {
+    padding: 50px 25px;
+    background: #4d4d3e;
+    color: white;
+  }
+  .footer__container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .footer__container--vertical {
+    flex-direction: column;
+    align-items: center;
+  }
+  .footer__item {
+    padding: 25px;
+    flex: 0 0 25%;
+  }
+  .footer__list-title {
+    font-weight: 600;
+    color: #ffffff69;
+  }
+  .footer__container--vertical .footer__item {
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .footer__container--vertical .footer__title {
+    display: none;
+  }
+  .footer__container--vertical .footer__newsletter-field {
+    justify-content: center;
+  }
+  .footer__container--vertical .footer__richtext {
+    text-align: center;
+  }
+  .footer__container--vertical .footer__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .footer__container--vertical .footer__list-li {
+    padding: 10px;
+  }
+  .footer__list {
+    list-style: none;
+  }
+  .footer__list-link {
+    display: inline-block;
+    text-decoration: none;
+  }
+  .footer__newsletter-title {
+    font-weight: 600;
+  }
+  .footer__newsletter {}
+  .footer__newsletter-field {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .footer__newsletter-submit {
+    min-width: 180px;
+    height: 58px;
+    border-radius: 0;
+    cursor: pointer;
+    margin-top: 25px;
+    background: #edede1;
+    color: #4d4d3e;
+    text-transform: none;
+  }
+  .footer__richtext-title {
+    margin: 0;
+    padding-bottom: 10px;
+    font-weight: 600;
+  }
+  .footer__newsletter-title svg {
+    width: 22px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  .footer__richtext {}
+  .footer__field-input {
+    font-size: 14px;
+    border-radius: 0;
+    padding: 0 0 15px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #ffffff69;
+    outline: 0;
+    background: transparent;
+  }
+  .footer__field-input::placeholder {
+    color: white;
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    .footer__item {
+      flex: 0 0 100%;
+    }
+    .footer__logo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer__newsletter-submit {
+      width: 100%;
+    }
+    .footer__item-linklist {
+      flex: 0 0 50%;
+    }
+    .footer__social-item {
+      margin-right: 25px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .footer {
+      padding: 50px 5px;
+    }
+    .footer__social-item {
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 490px) {
+    .footer__social-item {
+      margin-right: 15px;
+      margin-bottom: 15px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "logo",
+        "name": "Logo",
+        "settings": [
+          {
+            "type": "text",
+            "id": "logo_text",
+            "label": "Logo Text",
+            "default": "Logo"
+          }, {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo"
+          }, {
+            "type": "checkbox",
+            "id": "show_social_icons",
+            "label": "Show Social Icons"
+          }
+        ]
+      }, {
+        "type": "links",
+        "name": "Menu",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Select Menu"
+          }
+        ]
+      }, {
+        "type": "newsletter",
+        "name": "Newsletter",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Newsletter Title",
+            "default": "Be the first to know about our biggest and best sales."
+          }
+        ]
+      }, {
+        "type": "richtext",
+        "name": "Richtext",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Richtext Title",
+            "default": "Richtext"
+          }, {
+            "type": "richtext",
+            "id": "richtext",
+            "label": "Richtext",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam rhoncus metus pharetra nulla placerat euismod. Vivamus rhoncus at nisl euismod iaculis.</p>"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

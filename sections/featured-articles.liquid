@@ -1,0 +1,89 @@
+<div class="featured__articles">
+    <div class="featured__articles-container">
+        <h2 class="heading--underline mb--30 text--center">{{ section.settings.heading }}</h2>
+        <div class="featured__articles-flex-container">
+        {% for block in section.blocks %}
+        {% assign article = articles[block.settings.article] %}
+        <div class="featured__articles-flex-item mt--30">
+            <div class="featured__articles-flex-item-content">
+            {{ article.image | image_url: width: 2000 | image_tag: class:'lazyload' }}
+            <p class="mt--30 mb--25">{{ article.published_at | date: "%b %d, %Y" }}</p>
+            <h3 class="mb--15">{{ article.title }}</h3>
+            <div>
+                {{ article.excerpt }}
+            </div>
+            <a href="{{ article.url }}" class="featured__articles-btn mt--15 d--inline-block">Learn More -></a>
+        </div>
+        </div>
+        {% endfor %}    
+        </div>
+    </div>
+</div>
+
+<style>
+.featured__articles{
+
+}
+.featured__articles-container{
+padding: 45px;
+}
+.featured__articles-flex-container{
+display: flex;
+flex-wrap: wrap;
+}
+.featured__articles-flex-item{
+flex: 0 0 33.33%;
+} 
+.featured__articles-flex-item-content{
+    padding: 5px;
+}
+.featured__articles-btn{
+
+}
+@media screen and (max-width: 767px){
+    .featured__articles-flex-item {
+    flex: 0 0 50%;
+    }
+    .featured__articles-container {
+        padding: 25px;
+    }
+}
+
+@media screen and (max-width: 490px){
+    .featured__articles-flex-item {
+    flex: 0 0 100%;
+    }
+}
+</style>
+
+{% schema %}
+{
+    "name": "Featured Articles",
+   "settings": [
+    {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Your heading here"
+    }
+   ],
+   "blocks": [
+    {
+        "type": "articles",
+        "name": "Articles",
+        "settings": [
+        {
+            "type": "article",
+            "id": "article",
+            "label": "Article"
+        }
+      ]
+    }
+   ],
+  "presets": [
+    {
+        "name":"Featured Articles"
+    }
+  ]
+}
+{% endschema %}

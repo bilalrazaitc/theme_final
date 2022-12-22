@@ -1,0 +1,1107 @@
+{% assign menu = linklists[section.settings.menu].links %}
+{% capture 'header__menu' %}
+  <nav class="header__menu">
+    <ul class="header__menu-ul">
+      {% for link in menu %}
+        {% assign has_collection = false %}
+        {% for child_link in link.links %}
+          {% if child_link.type == 'collection_link' %}
+            {% assign has_collection = true %}
+          {% endif %}
+        {% endfor %}
+        <li class="header__menu-li {% if link.levels > 1 or link.levels == 1 and has_collection %}header__dropdown--has-mega-menu{% endif %}">
+          <a href="{{ link.url }}" class="header__menu-a">{{ link.title }}
+            {% if link.links != blank %}
+              {% render 'icon-caret' %}
+            {% endif %}
+          </a>
+          {% if link.links != blank %}
+            {% if link.levels > 1 and has_collection == true or link.levels > 1 and has_collection == false %}
+              <ul class="header__dropdown--mega-menu">
+                {% for child_link in link.links %}
+                  <ul class="header__dropdown--mega-menu-ul">
+                    <li class="header__dropdown--mega-menu-li-heading">
+                      <a href="{{ child_link.url }}" class="header__dropdown--mega-menu-a-heading">{{ child_link.title }}
+                      </a>
+                    </li>
+                    {% for grandchild_link in child_link.links %}
+                      <li class="header__dropdown--mega-menu-li">
+                        <a href="{{ grandchild_link.url }}" class="header__dropdown--mega-menu-a">{{ grandchild_link.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endfor %}
+              </ul>
+            {% elsif link.levels == 1 %}
+              {% if has_collection %}
+
+                <ul class="header__dropdown--mega-menu">
+                  <ul class="header__dropdown--mega-menu-ul">
+                    {% for child_link in link.links %}
+                      <li class="header__dropdown--mega-menu-li">
+                        <a
+                          href="{{ child_link.url }}"
+                          class="header__dropdown--mega-menu-a {% if child_link.type == 'collection_link' %}header__dropdown--mega-menu--hover{% endif %}"
+                          {% if child_link.type == 'collection_link' %}data-title="{{ child_link.title | downcase | strip }}"{% endif %}>{{ child_link.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <ul class="header__dropdown--mega-menu-coll-ul">
+                    {% for child_link in link.links %}
+                      {% if child_link.type == 'collection_link' %}
+                        <li class="header__dropdown--mega-menu-coll-li" data-title="{{ child_link.title | downcase | strip }}">
+                          <ul class="header__dropdown--mega-menu-coll-product-ul">
+                            {% for product in child_link.object.products limit: 4 %}
+                              <li class="header__dropdown--mega-menu-coll-product-li">
+                                <a href="{{ product.url }}" class="header__dropdown--mega-menu-coll-product-a">
+                                  <img src="{{ product | img_url: '300x' }}" class="header__dropdown--mega-menu-coll-product-img" />
+                                  <span class="header__dropdown--mega-menu-coll-product-span">{{ product.title }}
+                                  </span>
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </ul>
+
+              {% else %}
+                <ul class="header__dropdown-menu">
+                  {% for child_link in link.links %}
+                    <li class="header__dropdown-menu-li ">
+                      <a href="{{ child_link.url }}" class="header__dropdown-menu-a">{{ child_link.title }}
+                        {% if child_link.links != blank %}
+                          {% render 'icon-caret' %}
+                        {% endif %}
+                      </a>
+                      {% if child_link.links != blank %}
+                        <ul class="header__dropdown-menu {{ child_link.levels }}">
+                          {% for grandchild_link in child_link.links %}
+                            <li class="header__dropdown-menu-li">
+                              <a href="{{ grandchild_link.url }}" class="header__dropdown-menu-a">{{ grandchild_link.title }}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endcapture %}
+{% capture 'header__logo' %}
+  <h3 class="header__logo">
+    {{ shop.name }}
+  </h3>
+{% endcapture %}
+{% capture 'header__icons' %}
+  <div class="header__icons">
+    <span class="header__icons--search">
+      {%- render 'icon-search' -%}
+    </span>
+    <span class="header__icons--cart">
+      {% render 'icon-cart-empty' %}
+    </span>
+  </div>
+{% endcapture %}
+{% capture 'header__mobile' %}
+  <div class="header__mobile-wrapper">
+    <span class="header__mobile--icon"></span>
+  </div>
+{% endcapture %}
+<header class="header {{ section.settings.logo_position }}">
+  {% if section.settings.logo_position == 'header__logo-middle--left' %}
+    {{ header__mobile }}
+    {{ header__logo }}
+    {{ header__menu }}
+    {{ header__icons }}
+  {% elsif section.settings.logo_position == 'header__logo-middle--center' and menu.size <= 4 %}
+    {{ header__mobile }}
+    {{ header__menu }}
+    {{ header__logo }}
+    {{ header__icons }}
+  {% elsif section.settings.logo_position == 'header__logo-middle--center' and menu.size > 4 %}
+    <div class="header__logo-center-with-icons">
+      {{ header__mobile }}
+      {{ header__logo }}
+      {{ header__icons }}
+    </div>
+    {{ header__menu }}
+  {% elsif section.settings.logo_position == 'header__logo-top-center--with-icons' %}
+    <div class="header__logo-center-with-icons">
+      {{ header__mobile }}
+      {{ header__logo }}
+      {{ header__icons }}
+    </div>
+    {{ header__menu }}
+  {% elsif section.settings.logo_position == 'header__logo-top-left--with-icons' %}
+    <div class="header__logo-left-with-icons">
+      {{ header__mobile }}
+      {{ header__logo }}
+      {{ header__icons }}
+    </div>
+    {{ header__menu }}
+  {% endif %}
+
+  <div class="search">
+    <div class="search__wrapper">
+      <input
+        id="search"
+        type="search"
+        placeholder="Enter keyword"
+        class="search__input" />
+    </div>
+  </div>
+</header>
+
+
+<div class="cart-drawer__overlay"></div>
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__wrapper">
+    <p class="cart-drawer__title">Your Cart (<span class="cart-drawer__count" data-cart-drawer-count>{{ cart.item_count }}</span>)
+      <span class="cart-drawer__close" data-cart-drawer-close>&#10005;</span>
+    </p>
+    <div class="cart-drawer__bar-wrapper">
+      <p
+        class="cart-drawer__bar-text"
+        data-price="{{- settings.drawer_bar_price | times: 100.0 -}}"
+        data-cart-drawer-bar-text>
+        {%- assign cart_total_price = cart.total_price | divided_by: 100.0 -%}
+        {% if cart_total_price >= settings.drawer_bar_price %}
+          {{ settings.drawer_bar_success }}
+        {% else %}
+          {{ settings.drawer_bar_prefix }}
+          <span>{{ settings.drawer_bar_price | minus: cart_total_price | times: 100.0 | money }}</span>
+          {{ settings.drawer_bar_postfix }}
+        {% endif %}
+      </p>
+      <div class="cart-drawer__bar">
+        <div
+          class="cart_drawer__bar-line"
+          style="width: {{ cart_total_price | divided_by: settings.drawer_bar_price | times: 100 }}%;"
+          data-cart-drawer-bar-line></div>
+      </div>
+    </div>
+    <div class="cart-drawer__content-wrapper">
+      <div class="cart-drawer__content">
+        <div class="cart-drawer__content-ajax-wrapper" data-cart-drawer-ajax>
+          {% for item in cart.items %}
+            <div class="cart-drawer__grid" data-item-id="{{ forloop.index }}">
+              <div class="cart-drawer__grid-image">
+                <img src="{{ item.image | img_url: '300x' }}" />
+              </div>
+              <div class="cart-drawer__grid-details">
+                <span class="cart-drawer__grid--remove" data-cart-drawer-remove>&#10005;</span>
+                <a href="{{ item.product.url }}" class="cart-drawer__grid-produt-title">{{ item.product.title }}</a>
+                <p class="cart-drawer__grid-variant-title">{{ item.variant.title }}</p>
+
+                {%- assign property_size = item.properties | size -%}
+                {%- if property_size > 0 -%}
+                  <ul class="cart-drawer__grid-properties">
+                    {%- for property in item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <li>
+                          <strong>{{ property.first }}</strong>:
+                          {%- if property.last contains '/uploads/' -%}
+                            <a href="{{ property.last }}" target="_blank">{{ property.last | split: '/' | last }}</a>
+                          {%- else -%}
+                            {{ property.last }}
+                          {%- endif -%}
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+
+                {%- for discount in item.discounts -%}
+                  <p class="cart-drawer__grid-discount">{%- render 'icon-discount' -%} {{ discount.title }}</p>
+                {%- endfor -%}
+
+
+                <div class="cart-drawer__grid-data">
+                  <div class="cart-drawer__grid-quantity-wrapper">
+                    <span class="cart-drawer__grid-quantity--minus" data-cart-drawer-minus>-</span>
+                    <input
+                      type="number"
+                      value="1"
+                      class="cart-drawer__grid-quantity-input" />
+                    <span class="cart-drawer__grid-quantity--plus" data-cart-drawer-plus>+</span>
+                  </div>
+                  <div class="cart-drawer__grid-price">
+                    {%- if item.original_price != item.final_price -%}
+                      <strike>{{- item.original_price | money -}}</strike>
+                      {{ item.final_line_price | money }}
+                    {%- else -%}
+                      {{ item.original_price | money }}
+                    {%- endif -%}
+                  </div>
+                  <span class="cart-drawer__grid-error" data-cart-drawer-error></span>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="cart-drawer__content-empty">Your cart is empty!</div>
+          {% endfor %}
+        </div>
+        <div class="cart-drawer__content-discount-wrapper">
+          <input
+            type="text"
+            placeholder="eg. Discount Code"
+            data-cart-drawer-discount />
+          <a href="/checkout" data-cart-drawer-apply>Apply</a>
+        </div>
+        <details class="cart-drawer__content-note-wrapper">
+          <summary>Add an optional note</summary>
+          <div>
+            <textarea
+              name=""
+              id=""
+              rows="5"></textarea>
+          </div>
+        </details>
+        {%- assign recommendation = collections[settings.drawer_recommendation_collection] -%}
+        {%- if recommendation != blank and recommendation.products.length > 0 -%}
+          <div class="cart-drawer__recommendation">
+            <p class="cart-drawer__recommendation-title">Frequently Brought Together</p>
+            <div class="cart-drawer__recommendation-wrapper">
+              {% for product in recommendation.products %}
+                <div class="cart-drawer__grid">
+                  <div class="cart-drawer__grid-image">
+                    <img src="{{ product | img_url: '300x' }}" />
+                  </div>
+                  <div class="cart-drawer__grid-details">
+                    <a href="{{ product.url }}" class="cart-drawer__grid-produt-title">{{ product.title }}</a>
+                    <div class="cart-drawer__grid-data">
+                      <div class="cart-drawer__grid-atc-wrapper">
+                        {% form 'product', product, class: 'cart-drawer__grid-atc-form' %}
+                          <div class="cart-drawer__grid-price">{{ product.price | money }}</div>
+                          <input
+                            name="id"
+                            value="{{ product.selected_or_first_available_variant.id }}"
+                            hidden />
+                          <input
+                            name="quantity"
+                            value="1"
+                            hidden />
+                          <button
+                            type="submit"
+                            class="cart-drawer__grid--atc"
+                            {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                            {% if product.selected_or_first_available_variant.available %}Add{% else %}Sold{% endif %}
+                          </button>
+                          <span class="cart-drawer__grid-error" data-cart-drawer-error></span>
+                        {% endform %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__footer-subtotal" data-cart-drawer-total-wrapper>
+          <p>Subtotal</p>
+          <span data-cart-drawer-total>{{ cart.total_price | money }}</span>
+          <em>
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+
+              {%- for discount in cart.cart_level_discount_applications -%}
+                {%- render 'icon-discount' -%}
+                {{ discount.title }}
+                (-{{ discount.total_allocated_amount | money }})
+              {%- endfor -%}
+
+            {%- endif -%}
+          </em>
+        </div>
+        <p class="cart-drawer__footer-info">Shipping, Taxes, and Discounts calculated at checkout</p>
+        <a href="/collections" class="cart-drawer__footer-shopping">Continue Shopping</a>
+        <a
+          href="/checkout"
+          class="cart-drawer__footer-checkout"
+          data-cart-drawer-checkout>Checkout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  .cart-drawer__overlay {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #0000003b;
+    z-index: 2;
+  }
+  .cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    visibility: hidden;
+    width: 400px;
+    background: white;
+    height: 100%;
+    z-index: 2;
+    transition: all 0.2s;
+  }
+  .cart-drawer.active {
+    visibility: visible;
+    right: 0;
+  }
+  .cart-drawer__wrapper {
+    height: 100%;
+  }
+  .cart-drawer__title {
+    margin: 0;
+    padding: 10px 20px;
+    text-align: center;
+    border-bottom: 1px solid black;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .cart-drawer__bar-wrapper {
+    text-align: center;
+    background: #f7f7f7;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 90px;
+    align-items: center;
+    position: relative;
+    top: 50px;
+    opacity: 0;
+  }
+  .cart-drawer__bar-text {
+    margin: 0;
+  }
+  .cart-drawer__bar {
+    display: block;
+    width: 100%;
+    min-height: 12px;
+    background: #e7e7e7;
+    border-radius: 20px;
+    margin-top: 10px;
+    position: relative;
+  }
+  .cart_drawer__bar-line {
+    position: absolute;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    background: black;
+    border-radius: 20px;
+    transition: all 0.3s;
+  }
+  .cart-drawer__count {}
+  .cart-drawer__close {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .cart-drawer__content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 130px);
+  }
+  .cart-drawer__content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  .cart-drawer__content-ajax-wrapper {}
+  .cart-drawer__content-empty {
+    min-height: 130px;
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+  }
+  .cart-drawer__grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    border-bottom: 1px solid;
+    align-items: center;
+    position: relative;
+    top: 50px;
+    opacity: 0;
+  }
+  .cart-drawer__grid-image {
+    width: 85px;
+    padding-right: 15px;
+  }
+  .cart-drawer__grid-image img {
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+    max-width: 100%;
+  }
+  .cart-drawer__grid-details {
+    width: calc(100% - 85px);
+    position: relative;
+  }
+  .cart-drawer__grid-produt-title {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0;
+    margin-right: 20px;
+  }
+  .cart-drawer__grid--remove {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .cart-drawer__grid-variant-title {
+    font-size: 13px;
+    margin: 5px 0 0;
+  }
+  .cart-drawer__grid-data {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .cart-drawer__grid-error {
+    font-size: 12px;
+    color: red;
+    padding-top: 8px;
+    width: 100%;
+    display: none;
+  }
+  .cart-drawer__grid-error.active {
+    display: block;
+  }
+  .cart-drawer__grid-quantity-wrapper {
+    display: flex;
+    border: 1px solid #4d4d3e;
+  }
+  .cart-drawer__grid-quantity--minus {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    cursor: pointer;
+  }
+  .cart-drawer__grid-quantity-input {
+    min-height: 24px;
+    max-width: 40px;
+    min-width: 40px;
+    outline: 0;
+    border: 0;
+    text-align: center;
+    border-right: 1px solid #4d4d3e;
+    border-left: 1px solid #4d4d3e;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  .cart-drawer__grid-quantity-input::-webkit-outer-spin-button,
+  .cart-drawer__grid-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  .cart-drawer__grid-quantity-input[type=number] {
+    -moz-appearance: textfield;
+  }
+  .cart-drawer__grid-quantity--plus {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    cursor: pointer;
+  }
+  .cart-drawer__grid-price {
+    position: relative;
+  }
+  .cart-drawer__grid-price.active {
+    color: transparent;
+  }
+  .cart-drawer__grid-price.active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 2px solid black;
+    border-left: 2px solid transparent;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    animation: drawerLoading 1s linear infinite;
+  }
+  .cart-drawer__content-discount-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid;
+  }
+  .cart-drawer__content-discount-wrapper input {
+    display: block;
+    width: calc(100% - 100px);
+    border: 1px solid black;
+    height: 36px;
+    padding: 0 5px;
+  }
+  .cart-drawer__content-discount-wrapper a {
+    width: 92px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    color: white;
+    text-decoration: none;
+  }
+  .cart-drawer__content-note-wrapper {
+    padding: 10px 20px;
+  }
+  .cart-drawer__content-note-wrapper summary {}
+  .cart-drawer__content-note-wrapper textarea {
+    width: 100%;
+    outline: 0;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .cart-drawer__recommendation {}
+  .cart-drawer__recommendation-title {
+    margin: 0;
+    color: white;
+    background: black;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 15px;
+  }
+  .cart-drawer__recommendation-wrapper {}
+  .cart-drawer__grid-atc-wrapper {
+    width: 100%;
+
+  }
+  .cart-drawer__grid-atc-form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-drawer__grid--atc {
+    padding: 5px;
+    border: 0;
+    background: black;
+    color: white;
+    cursor: pointer;
+    position: relative;
+  }
+  .cart-drawer__grid--atc.active {
+    color: transparent;
+  }
+  .cart-drawer__grid--atc.active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+    border-left: 2px solid transparent;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    animation: drawerLoading 1s linear infinite;
+  }
+  .cart-drawer__footer {
+    padding: 20px;
+    border-top: 1px solid black;
+    position: relative;
+    top: 50px;
+    opacity: 0;
+  }
+  .cart-drawer__footer-subtotal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .cart-drawer__footer-subtotal svg {
+    height: 12px;
+    width: 12px;
+  }
+  .cart-drawer__footer-subtotal span {
+    position: relative;
+    text-align: right;
+  }
+  .cart-drawer__footer-subtotal em {
+    width: 100%;
+    position: relative;
+    text-align: right;
+    margin-top: 5px;
+    font-style: normal;
+  }
+  .cart-drawer__footer-subtotal.active span {
+    color: transparent;
+  }
+  @keyframes drawerLoading {
+    0% {
+      transform: translateY(-50%) rotate(0deg)
+    }
+    100% {
+      transform: translateY(-50%) rotate(360deg)
+    }
+  }
+  .cart-drawer__footer-subtotal.active span::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 2px solid black;
+    border-left: 2px solid transparent;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    animation: drawerLoading 1s linear infinite;
+  }
+  .cart-drawer__footer-subtotal p {
+    margin: 0;
+  }
+  .cart-drawer__footer-info {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .cart-drawer__footer-shopping {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+    color: black;
+    margin-bottom: 10px;
+    border: 1px solid black;
+  }
+  .cart-drawer__footer-checkout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+    background-color: black;
+  }
+
+  .cart-drawer__recommendation-wrapper .cart-drawer__grid:last-child {
+    border-bottom: 0;
+  }
+
+  .cart-drawer.active .cart-drawer__bar-wrapper {
+    opacity: 1;
+    top: 0;
+    transition: all 0.5s;
+  }
+  .cart-drawer.active .cart-drawer__grid {
+    opacity: 1;
+    top: 0;
+    transition: all 0.5s;
+    transition-delay: 0.25s;
+  }
+  .cart-drawer.active .cart-drawer__footer {
+    opacity: 1;
+    top: 0;
+    transition: all 0.5s;
+    transition-delay: 0.50s;
+  }
+  .cart-drawer__grid-discount {
+    margin: 5px 0 0;
+    font-size: 13px;
+  }
+  .cart-drawer__grid-discount svg {
+    height: 10px;
+    width: 10px;
+  }
+  .cart-drawer__grid-properties {
+    margin: 5px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+</style>
+
+
+<style>
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 50px;
+    height: 80px;
+    position: relative;
+  }
+  .header__menu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .header__logo {
+    font-size: 20px;
+  }
+  .header__icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .header__icons--search {
+    cursor: pointer;
+  }
+  .header__icons--cart {
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .header__icons--search svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  .header__icons--cart svg {
+    width: 40px;
+    vertical-align: bottom;
+    height: 40px;
+  }
+  .header__logo-center-with-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 0 0 100%;
+  }
+  .header__logo-left-with-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 0 0 100%;
+  }
+  .header__logo-middle--left .header__menu {
+    flex: 0 0 60%;
+  }
+  .header__logo-middle--left .header__logo {
+    flex: 0 0 20%;
+  }
+  .header__logo-middle--left .header__icons {
+    flex: 0 0 20%;
+  }
+
+  .header__logo-middle--center .header__menu {
+    flex: 0 0 35%;
+  }
+  .header__logo-middle--center .header__logo-center-with-icons + .header__menu {
+    flex: 0 0 100%;
+  }
+  .header__logo-middle--center .header__logo {
+    flex: 0 0 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .header__logo-middle--center .header__icons {
+    flex: 0 0 35%;
+  }
+
+  .header__logo-top-center--with-icons .header__menu {
+    flex: 0 0 100%;
+  }
+  .header__logo-top-center--with-icons .header__logo {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .header__logo-top-center--with-icons .header__icons {
+    flex: 0 0 25%;
+  }
+  .header__logo-top-left--with-icons .header__menu {
+    flex: 0 0 100%;
+  }
+  .header__logo-top-left--with-icons .header__logo {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .header__logo-top-left--with-icons .header__icons {
+    flex: 0 0 50%;
+  }
+
+  .header__menu-ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    list-style: none;
+    justify-content: center;
+  }
+  .header__menu-li {
+    padding: 10px;
+    position: relative;
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header__dropdown--has-mega-menu {
+    position: static;
+  }
+  .header__menu-li:hover .header__dropdown-menu {
+    display: block;
+  }
+  .header__menu-li svg {
+    height: 10px;
+    width: 10px;
+  }
+  .header__menu-a {
+    display: block;
+    text-decoration: none;
+  }
+  .header__dropdown-menu {
+    display: block;
+    width: 100%;
+    list-style: none;
+    position: absolute;
+    left: 0;
+    top: 60px;
+    background: white;
+    min-width: 160px;
+    padding: 5px 0;
+    border-radius: 6px;
+    box-shadow: 0 0 5px #cbcbcb;
+    z-index: 2;
+    display: none;
+  }
+  .header__dropdown-menu-li {
+    display: block;
+  }
+  .header__dropdown-menu-a {
+    display: block;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+  .header__dropdown-menu-a:hover {
+    background-color: #f1f1f1;
+  }
+  .header__dropdown--mega-menu {
+    width: 100%;
+    top: 80px;
+    list-style: none;
+    position: absolute;
+    left: 0;
+    background: white;
+    min-width: 160px;
+    padding: 0 25px;
+    border-radius: 0;
+    box-shadow: 0 4px 3px #cbcbcb;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 2;
+    display: none;
+    border-top: 1px solid black;
+  }
+  .header__dropdown--mega-menu-ul {
+    flex: 0 0 25%;
+    list-style: none;
+    margin: 0;
+    padding: 25px;
+  }
+  .header__dropdown--mega-menu-li-heading {}
+  .header__dropdown--mega-menu-a-heading {
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .header__dropdown--mega-menu-a {
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .header__dropdown--has-mega-menu:hover .header__dropdown--mega-menu {
+    display: flex;
+  }
+
+  .header__dropdown--mega-menu-coll-ul {
+    flex: 0 0 75%;
+  }
+  .header__dropdown--mega-menu-coll-li {
+    display: none;
+    width: 100%;
+  }
+  .header__dropdown--mega-menu-coll-li:first-child {
+    display: block;
+  }
+  .header__dropdown--mega-menu-coll-product-ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    list-style: none;
+  }
+  .header__dropdown--mega-menu-coll-product-li {
+    flex: 0 0 25%;
+    margin: 0;
+    padding: 25px;
+  }
+  .header__dropdown--mega-menu-coll-product-a {
+    text-decoration: none;
+    text-align: center;
+    display: block;
+  }
+  .header__dropdown--mega-menu-coll-product-img {
+    max-width: 100%;
+    height: auto;
+    width: 100%;
+    display: block;
+  }
+  .header__dropdown--mega-menu-coll-product-span {
+    padding-top: 10px;
+    display: block;
+  }
+
+  .header__mobile-wrapper {
+    flex: 0 0 15%;
+    display: none;
+    align-items: center;
+  }
+  .header__mobile--icon {
+    position: relative;
+    width: 30px;
+    height: 10px;
+  }
+  .header__mobile--icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: black;
+    border-radius: 100px;
+  }
+  .header__mobile--icon::after {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 66%;
+    height: 3px;
+    background: black;
+    border-radius: 100px;
+  }
+
+
+  .search {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+  }
+  .search__wrapper {
+    padding: 0 30px 20px;
+  }
+  .search__input {
+    display: block;
+    width: 100%;
+    height: 45px;
+    border-radius: 100px;
+    border: 1px solid #0000004a;
+    padding: 0 15px;
+    outline: 0;
+  }
+
+
+  @media screen and (max-width: 1280px) {
+    .header__menu {
+      display: none;
+    }
+    .header__logo-middle--left .header__logo {
+      flex: 0 0 70%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header__logo-middle--left .header__icons {
+      flex: 0 0 15%;
+
+    }
+    .header__mobile-wrapper {
+      display: flex;
+    }
+  }
+</style>
+
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Select Menu"
+      }, {
+        "type": "select",
+        "id": "logo_position",
+        "label": "Logo Position",
+        "options": [
+          {
+            "value": "header__logo-middle--left",
+            "label": "Middle Left"
+          }, {
+            "value": "header__logo-middle--center",
+            "label": "Middle Center"
+          }, {
+            "value": "header__logo-top-center--with-icons",
+            "label": "Top Center"
+          }, {
+            "value": "header__logo-top-left--with-icons",
+            "label": "Top Left"
+          }
+        ],
+        "default": "header__logo-middle--left"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,156 @@
+<div class="logo-with-text">
+    <div class="logo-with-text__container">
+      <h2 class="heading--underline">{{ section.settings.heading }}</h2>
+        <div class="logo-with-text__flex-container">
+            {% for block in section.blocks %}
+            <div class="logo-with-text__flex-item">
+                <div class="logo-with-text__flex-item-content">
+                  <div class="logo-with-text__image" style="max-width: {{ block.settings.width }}px;">
+                      {% if block.settings.image %}
+                      {{ block.settings.image | image_url: width: 300 | image_tag: class:'lazyload' }}
+                      {% else %}
+                      {% if block.settings.svg != blank %}
+                      {{ block.settings.svg }}
+                      {% else %}
+                      {{ 'product-1' | placeholder_svg_tag }}
+                      {% endif %}
+                      {% endif %}
+                  </div>
+                  <h4 class="logo-with-text__title">{{ block.settings.title }}</h4>
+                  <p class="logo-with-text__subtitle">{{ block.settings.subtitle }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.logo-with-text{
+  border-bottom: 1px solid black;
+    margin-bottom: 100px;
+    margin-top: 50px;
+}
+.logo-with-text__container{
+  max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 35px;
+    padding: 25px;
+}
+.logo-with-text__container h2{
+  text-align: center;
+  padding: 0 25px;
+  margin-bottom: 20px;
+}
+.logo-with-text__flex-container{
+display: flex;
+flex-wrap: wrap;
+width: 100%;
+padding: 10px;
+align-items: center;
+}
+.logo-with-text__flex-item{
+    flex: 0 0 16.66%;
+    padding: 15px;
+}
+.logo-with-text__flex-item-content{
+}
+.logo-with-text__image{
+display: block;
+width: auto;
+height: auto;
+max-width: 100%;
+margin: 0 auto;
+}
+.logo-with-text__title{
+text-align: center;
+margin-top: 10px;
+}
+.logo-with-text__subtitle{
+    text-align: center;
+    margin-top: 5px;
+}
+
+@media screen and (max-width: 992px){
+  .logo-with-text__flex-item{
+    flex: 0 0 33.33%;
+    padding: 10px;
+  }
+}
+@media screen and (max-width: 767px){
+  .logo-with-text__container{
+    padding: 10px;
+  }
+  .logo-with-text__container h2{
+    padding: 0 10px;
+  }
+}
+</style>
+
+{% schema %}
+{
+    "name": "Logo with text",
+   "settings": [
+   {
+     "type": "text",
+     "id": "heading",
+     "label": "Heading",
+    "default": "Your heading here"
+ }
+   ],
+   "blocks": [
+    {
+       "type": "logo",
+       "name": "Logo",
+      "settings": [
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+        {
+          "type": "html",
+          "id": "svg",
+          "label": "Svg Code"
+      },
+      {
+        "type": "range",
+        "id": "width",
+        "min": 70,
+        "max": 200, 
+        "step": 10,
+        "unit": "px",
+        "label": "Logo Width",
+        "default": 140
+      }
+      ]
+    }
+   ],
+  "presets": [
+    {
+        "name":"Logo with text",
+        "blocks": [
+          {
+            "type": "logo"
+          },
+          {
+            "type": "logo"
+          },
+          {
+            "type": "logo"
+          },
+          {
+            "type": "logo"
+          },
+          {
+            "type": "logo"
+          },
+          {
+            "type": "logo"
+          }
+        ]
+    }
+  ]
+}
+{% endschema %}

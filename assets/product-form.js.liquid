@@ -1,0 +1,34 @@
+document.querySelectorAll(".main-product__options-input, .main-product__options-select").forEach(function(element){
+    element.addEventListener("change", function(){
+        document.querySelector("[data-product-form-error]").classList.remove("active");
+        let swatchOptionIndex = element.getAttribute("data-option");
+        let swatchValue = element.value;
+        let singleOptionSelector = element.closest(".main-product__details-wrapper").querySelectorAll(".single-option-selector");
+        singleOptionSelector.forEach(function(select){
+            let selectOptionIndex = select.getAttribute("data-option");
+            if(selectOptionIndex == swatchOptionIndex){
+                select.value = swatchValue;
+                select.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+});
+
+document.querySelectorAll(".main-product__quantity-wrapper span").forEach(item => {
+    item.addEventListener("click", e => {
+        let quantityInput = document.querySelector("[main-product-quantity-input]");
+        let quantity = parseInt(quantityInput.value);
+        let val = 0;
+        if(e.target.hasAttribute("main-product-quantity-plus")){
+            val = quantity + 1;
+            quantityInput.value = val;
+        }
+        else if(e.target.hasAttribute("main-product-quantity-minus") && quantity >= 2){
+            val = quantity - 1;
+            quantityInput.value = val;
+        }
+        if(document.querySelector(".main-product__form [main-product-quantity-input]") != null){
+            document.querySelector(".main-product__form [main-product-quantity-input]").value = val;
+        }
+    });
+});

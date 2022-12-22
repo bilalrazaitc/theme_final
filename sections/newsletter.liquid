@@ -1,0 +1,149 @@
+<div class="newsletter">
+    <div class="newsletter__overlay"></div>
+    <div class="newsletter__container">
+        <h2 class="mb--30 text--center">{{ section.settings.heading }}</h2>
+        <p class="mb--30 text--center">{{ section.settings.subheading }}</p>
+        {%- form 'customer', class: 'newsletter__form mt--30' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="newsletter__field">
+            <input
+              type="email"
+              name="contact[email]"
+              class="newsletter__field-input"
+              value="{{ form.email }}"
+              placeholder="Enter Email"
+              required 
+            >
+            <button type="submit" class="btn btn--primary newsletter__field-submit">Subscribe</button>
+          </div>
+          {%- if form.errors -%}
+          Something went wrong!
+          {%- endif -%}
+        {%- if form.posted_successfully? -%}
+          Successfully Submitted!
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+</div>
+
+
+<style>
+.newsletter{
+    {% if section.settings.img %}
+    background: url("{{ section.settings.img | img_url: 'master' }}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    {% endif %}
+    position: relative;
+    padding: 50px 30px;
+}
+.newsletter__container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    height: 350px;
+}
+.newsletter__container h2{
+color: white;
+}
+.newsletter__container p{
+color: white;
+}
+.newsletter__overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000040;
+    z-index: 1;
+    display: block !important;
+}
+.newsletter__form{
+  max-width: 600px;
+}
+.newsletter__field{
+  display: flex;
+    max-width: 600px;
+    min-width: 600px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.newsletter__field-input{
+  height: 70px;
+    padding: 0 15px;
+    outline: none;
+    width: calc(100% - 153px);
+    margin-right: 3px;
+}
+.newsletter__field-submit{
+    min-width: 150px;
+}
+@media screen and (max-width: 767px){
+  {% if section.settings.mobile_img %}  
+  .newsletter{
+    background: url("{{ section.settings.mobile_img | img_url: 'master' }}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+  {% endif %}
+  .newsletter__field{
+    min-width: 100%;
+    max-width: 100%;
+  }
+  .newsletter__form{
+    max-width: 400px;
+  width: 100%;
+}
+.newsletter__field-input{
+  height: 50px;
+  width: calc(100% - 153px);
+}
+.newsletter__field-submit{
+  height: 50px;
+  min-width: 80px;
+  }
+}
+</style>
+
+{% schema %}
+{
+    "name": "Newsletter",
+   "settings": [
+   {
+    "type": "image_picker",
+    "id": "img",
+    "label": "Desktop Background Image"
+},
+{
+  "type": "image_picker",
+  "id": "mobile_img",
+  "label": "Mobile Background Image"
+},
+   {
+    "type": "text",
+    "id": "heading",
+    "label": "Heading",
+    "default": "Your heading here"
+},
+{
+    "type": "textarea",
+    "id": "subheading",
+    "label": "Subheading",
+    "default": "Your subheading here"
+}
+   ],
+  "presets": [
+    {
+        "name":"Newsletter"
+    }
+  ]
+}
+{% endschema %}

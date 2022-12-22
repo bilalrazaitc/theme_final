@@ -1,0 +1,182 @@
+<div class="featured-collection">
+  <div class="featured-collection__container">
+    <h2 class="heading--underline">{{ section.settings.heading }}
+    </h2>
+    <div class="featured-collection__flex">
+      <div class="featured-collection__flex-container main-carousel" data-flickity='{ "cellAlign": "left", "contain": true }'>
+        {% for product in collections[section.settings.collection].products %}
+          <div class="featured-collection__flex-item carousel-cell">
+            <div class="featured-collection__flex-item-content">
+              {% form 'product', product %}
+                <div class="featured-collection__image">
+
+
+                  {% if product.price > 0 %}
+                    {% if product.compare_at_price != blank and product.compare_at_price > product.price %}
+                      {% assign percentage = 0 %}
+                      {% for variant in product.variants %}
+                        {% assign saving = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price | round %}
+                        {% assign percentage = saving | at_least: percentage %}
+                      {% endfor %}
+                      <div id="circle">
+                        <span class="circle-sale">-{{ percentage }}
+                          %</span>
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+                          <defs>
+                            <path id="circlePath" d="M 150, 150 m -60, 0 a 60,60 0 0,1 120,0 a 60,60 0 0,1 -120,0 "/>
+                          </defs>
+                          <circle cx="150" cy="100" r="75" fill="none"/>
+                          <g>
+                            <use xlink:href="#circlePath" fill="none"/>
+                            <text fill="#000">
+                              <textPath xlink:href="#circlePath">SALE&nbsp; SALE &nbsp; SALE &nbsp; SALE &nbsp; SALE &nbsp; SALE &nbsp;SALE</textPath>
+                            </text>
+                          </g>
+                        </svg>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+
+                  {{ product | image_url: width: 2000 | image_tag: class:'lazyload' }}
+
+                  <div class="featured-collection__swatch-container">
+                    {% for product_option in product.options_with_values %}
+                      {% assign on = product_option.name | downcase | strip %}
+                      {% if on == 'size' %}
+                        {% assign fi = forloop.index0 %}
+                        <div class="featured-collection__swatch-item">
+                          {% for value in product_option.values %}
+                            <input id="option-{{fi}}-{{forloop.index}}-{{product.id}}" type="radio" value="{{ value | downcase | strip }}" name="option-{{fi}}-{{product.id}}" {% if product_option.selected_value == value %}checked{% endif %}/>
+                            <label for="option-{{fi}}-{{forloop.index}}-{{product.id}}" {% if forloop.first %}class="featured-collection__swatch-first"{% elsif forloop.last %}class="featured-collection__swatch-last"{% endif %}>{{ value }}
+                            </label>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                      {% unless on == 'size' or on == 'color' %}
+                        {% assign fi = forloop.index0 %}
+                        <div class="featured-collection__swatch-item">
+                          {% for value in product_option.values %}
+                            <input id="option-{{fi}}-{{forloop.index}}-{{product.id}}" type="radio" value="{{ value | downcase | strip }}" name="option-{{fi}}-{{product.id}}" {% if product_option.selected_value == value %}checked{% endif %}/>
+                            <label for="option-{{fi}}-{{forloop.index}}-{{product.id}}" {% if forloop.first %}class="featured-collection__swatch-first"{% elsif forloop.last %}class="featured-collection__swatch-last"{% endif %}>{{ value }}
+                            </label>
+                          {% endfor %}
+                        </div>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="featured-collection__info">
+                  <a href="{{ product.url }}" class="featured-collection__title">{{ product.title }}
+                  </a>
+                  {% if product.price > 0 %}
+                    <p class="featured-collection__price">
+
+                      <strike>
+                        {% if product.compare_at_price != blank and product.compare_at_price > product.price %}
+                          {{ product.compare_at_price | money }}
+                        {% endif %}
+                      </strike>
+
+                      <span>{{ product.price | money }}
+                      </span>
+                    </p>
+                  {% endif %}
+
+
+                  {% for product_option in product.options_with_values %}
+                    {% assign on = product_option.name | downcase | strip %}
+                    {% if on == 'color' %}
+                      {% assign fi = forloop.index0 %}
+                      <div class="featured-collection__swatch-item">
+                        {% for value in product_option.values %}
+                          <input id="option-{{fi}}-{{forloop.index}}-{{product.id}}" type="radio" value="{{ value | downcase | strip }}" name="option-{{fi}}-{{product.id}}" {% if product_option.selected_value == value %}checked{% endif %}/>
+                          <label for="option-{{fi}}-{{forloop.index}}-{{product.id}}" class="{% if forloop.first %}featured-collection__swatch-first{% elsif forloop.last %}featured-collection__swatch-last{% endif %} featured-collection__color" style="background-color: {{ value }};"></label>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+
+
+                </div>
+                {%- comment -%} <select name="id" hidden>
+                  {% for variant in product.variants %}
+                    <!-- {% liquid
+                    assign stock = "instock"
+                    if variant.inventory_management != "shopify"
+                    assign stock = "instock"
+                    elsif variant.inventory_management == "shopify" and variant.inventory_policy == "continue"
+                    assign stock = "instock"
+                    elsif variant.inventory_management == "shopify" and variant.inventory_policy == "deny" and variant.inventory_quantity <= 0
+                    assign stock = "soldout"
+                    endif
+                    %} -->
+                    <option value="{{ variant.id }}" data-price="{{ variant.price | money }}" data-compare-at-price="{% if variant.compare_at_price != blank and variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}" data-availability="{% if variant.available %}instock{% else %}soldout{% endif %}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>{{ variant.title | downcase | strip }}
+                    </option>
+                  {% endfor %}
+                </select> {%- endcomment -%}
+                <select id="product-select" name="id">
+  {% for variant in product.variants %}
+    <option value="{{ variant.id }}"
+      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+    >
+      {{ variant.title }} - {{ variant.price | money }}
+    </option>
+  {% endfor %}
+</select>
+                <input name="quantity" value="1" hidden/>
+                <!-- {% liquid
+                assign stock = "Add to Cart"
+                if product.selected_or_first_available_variant.inventory_management != "shopify"
+                assign stock = "Add to Cart"
+                elsif product.selected_or_first_available_variant.inventory_management == "shopify" and product.selected_or_first_available_variant.inventory_policy == "continue"
+                assign stock = "Add to Cart"
+                elsif product.selected_or_first_available_variant.inventory_management == "shopify" and product.selected_or_first_available_variant.inventory_policy == "deny" and product.selected_or_first_available_variant.inventory_quantity <= 0
+                assign stock = "Sold Out"
+                endif
+                %} -->
+                <button type="submit" data-instock="Add to Cart" data-soldout="Sold Out" class="btn btn--primary form--submit">
+                  {% if product.selected_or_first_available_variant.available %}Add to Cart{% else %}Sold Out{% endif %}
+                </button>
+              {% endform %}
+            </div>
+          </div>
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+    var selectCallback = function(variant, selector) {
+  console.log(variant, selector);
+}
+            new Shopify.OptionSelectors('product-select', {
+  product: {{ product | json }},
+  onVariantSelected: selectCallback,
+  enableHistoryState: true
+});
+          </script>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Featured Collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Your heading here"
+      }, {
+        "type": "collection",
+        "id": "collection",
+        "label": "Select Collection"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured Collection"
+      }
+    ]
+  }
+{% endschema %}

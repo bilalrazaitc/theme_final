@@ -1,0 +1,237 @@
+{% if section.blocks.size > 0 %}
+{%- capture menu -%}
+{%- for block in section.blocks -%}
+{{- block.settings.tab_category -}},
+{%- endfor -%}
+{%- endcapture -%}
+{% assign menu_item = menu | split: ',' | uniq %}
+<div class="tabs">
+    <ul class="tabs__ul">
+        {% for item in menu_item %}
+        <li class="tabs__li">
+            <span class="tabs__span {% if forloop.first %}active{% endif %}" data-title="{{ item | handleize }}">{{ item }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="tabs__container">
+        {% for block in section.blocks %}
+        {% if block.settings.image %}
+        <div class="tabs__item {% if block.settings.tab_category == menu_item[0] %}active{% endif %}" data-title="{{ block.settings.tab_category | handleize }}">
+            <div class="tabs__item-content">
+                <div class="tabs_item-content-image">
+                    {{ block.settings.image | image_url: width: 500 | image_tag: class:'lazyload' }}
+                    <div class="tabs_item-content-overlay">
+                        {% if block.settings.link_text_1 != blank %}
+                        <a href="{{ block.settings.link_1 }}" class="tabs_item-link btn btn--secondary">{{ block.settings.link_text_1 }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="p--15">
+                <h3 class="mb--10">{{ block.settings.title }}</h3>
+                <p class="m--0">{{ block.settings.subtitle }}</p>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<style>
+.tabs{
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 35px;
+}
+.tabs__ul{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid gainsboro;
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    margin-bottom: 25px;
+    justify-content: space-evenly;
+    -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.tabs__ul::-webkit-scrollbar {
+  display: none;
+}
+.tabs__li{
+}
+.tabs__span{
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 15px 30px;
+    display: block;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+    z-index: 2;
+    border-bottom: 2px solid transparent;
+}
+.tabs__span.active{
+    border-bottom-color:black;
+}
+.tabs__container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.tabs__item{
+    width: 33.33%;
+    padding: 15px;
+    display: none;   
+}
+.tabs__item.active{
+    display: block;
+}
+.tabs__item-content{
+    box-shadow: rgb(211 212 213) 0px 6px 24px 0px;
+}
+.tabs_item-content-image{
+    position: relative;
+}
+.tabs_item-content-image img{
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    height: 350px;
+    object-fit: cover;
+}
+.tabs_item-content-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 50px;
+    background: #00000040;
+    opacity: 0;
+    transition: all 0.5s;
+}
+.tabs_item-content-overlay:hover{
+    opacity: 1;
+}
+.tabs_item-link{
+margin: 5px;
+display: block;
+width: 100%;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+@media screen and (max-width: 1024px){
+    .tabs__item{
+        width: 50%;
+    }
+    .tabs__ul{
+        flex-wrap: nowrap;
+        white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: unset;
+    }
+    .tabs__span{
+        padding: 15px;
+        top: 1px;
+    }
+    .tabs__li:first-child{
+        margin-left: auto;
+    }
+    .tabs__li:last-child{
+        margin-right: auto;
+    }
+}
+@media screen and (max-width: 767px){
+    .tabs_item-content-image img{
+        height: 275px;
+    }
+    .tabs{
+        padding: 20px;
+    }
+    .tabs__item{
+        padding: 10px;
+    }
+}
+@media screen and (max-width: 550px){
+    .tabs__item{
+        width: 100%;
+    }
+    .tabs_item-content-image img{
+        height: auto;
+    }
+}
+</style>
+
+
+{% schema %}
+{
+    "name": "Tabs",
+   "settings": [
+    {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Our Favorites"
+    }
+   ],
+   "blocks": [
+    {
+       "type": "block",
+       "name": "Block",
+      "settings": [
+        {
+            "type": "text",
+            "id": "tab_category",
+            "label": "Tab Category",
+            "default": "Category 1"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Your title here"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Your subtitle here"
+        },
+        {
+            "type": "text",
+            "id": "link_text_1",
+            "label": "Link text",
+            "default": "Your text here"
+        },
+        {
+            "type": "url",
+            "id": "link_1",
+            "label": "Link"
+        }
+      ]
+    }
+   ],
+  "presets": [
+    {
+        "category": "Tabs",
+        "name":"Tabs"
+    }
+  ]
+}
+{% endschema %}

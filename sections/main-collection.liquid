@@ -1,0 +1,768 @@
+<style>
+  .main-collection__products{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 45px;
+  }
+.product-card__wrapper{
+width: 25%;
+padding: 5px;
+}
+.product-card{
+    margin-bottom: 20px;
+}
+.product-card__media-wrapper{
+position: relative;
+}
+.product-card__media{
+    position: relative;
+    padding-bottom: calc(100% * 4 / 5);
+}
+.product-card__media-image{
+width: 100%;
+height: 100%;
+display: block;
+position: absolute;
+object-fit: cover;
+}
+.product-card__swatch__wrapper{
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+    background-color: #ffffffe6;
+    padding: 0 13px 15px 13px;
+      opacity: 0;
+  transition: opacity 0.3s;
+}
+.product-card__swatch__content{
+        padding-top: 15px;
+        display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    white-space: nowrap;
+}
+.product-card__swatch__content::-webkit-scrollbar {
+  display: none;
+}
+.product-card__swatch{
+
+}
+.product-card__swatch:checked + .product-card__swatch-label {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+.product-card__swatch-label{
+display: inline-flex;
+    background-color: transparent;
+    border-radius: 4px;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    min-width: 36px;
+    margin: 0 2px;
+    padding: 0 10px;
+    font-size: 11px;
+    border: 1px solid #d3d3d3;
+}
+.product-card__swatch-label-left{
+margin-left: auto;
+}
+.product-card__swatch-label-right{
+margin-right: auto;
+}
+.product-card__content{
+    text-align: center;
+    padding-top: 10px;
+}
+.product-card__title{
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+.product-card__price{
+    display: block;
+    margin: 0;
+    padding-top: 5px;
+}
+.product-card__regular-price{
+font-size: 13px;
+}
+.product-card__sale-price{
+font-size: 13px;
+text-decoration: line-through;
+}
+.product-card__color-swatch__wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+        padding-top: 10px;
+        height: 20px;
+        align-items: center;
+}
+    
+.product-card__color-swatch-label{
+    border-radius: 50%;
+    height: 8px;
+    width: 8px;
+    box-shadow: 0 0 0 1px #0000004a;
+    padding: 0;
+        margin: 0 5px;
+}
+.product-card__swatch:checked + .product-card__color-swatch-label{
+box-shadow: 0 0 0 2px #333;
+}
+.product-card__form{
+
+}
+.product-card--submit{
+  opacity: 0;
+  width: 100%;
+  transition: opacity 0.3s;
+      max-width: 100%;
+      height: 45px;
+          margin-top: 15px;
+}
+.product-card:hover .product-card--submit{
+  opacity: 1;
+}
+.product-card:hover .product-card__swatch__wrapper{
+    opacity: 1;
+}
+.product-card--loading::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 2;
+  transition: opacity 1s;
+}
+.product-card--progress::before{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: gainsboro;
+  width: 100px;
+  height: 3px;
+  z-index: 3;
+  transition: opacity 1s;
+}
+.product-card--progress::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0, 1);
+  background-color: #222222;
+  width: 100px;
+  height: 3px;
+  z-index: 3;
+  transform-origin: left;
+  animation: animate-card-progress 3s ease-in infinite;
+  transition: opacity 1s;
+}
+@keyframes animate-card-progress{
+  0%{transform: translate(-50%, -50%) scale(0, 1)}
+  100%{transform: translate(-50%, -50%) scale(1, 1)}
+}
+
+.product-card--loading.product-card--loaded::before{
+  opacity: 0;
+}
+.product-card--progress.product-card--loaded::before{
+    opacity: 0;
+}
+.product-card--progress.product-card--loaded::after{
+    opacity: 0;
+}
+.product-card .selector-wrapper{
+  display: none;
+}
+
+@media screen and (max-width: 1280px){
+  .product-card__wrapper{
+    width: 33.33%;
+  }
+}
+@media screen and (max-width: 992px){
+  .product-card__wrapper{
+    width: 50%;
+  }
+  .product-card__swatch__wrapper, .product-card--submit {
+    opacity: 1;
+}
+}
+@media screen and (max-width: 767px){
+.main-collection__products{
+  padding: 0 25px;
+}
+.product-card__swatch__wrapper{
+      padding: 0 8px 10px 8px;
+}
+.product-card__swatch-label {
+    min-height: 30px;
+    min-width: 30px;
+}
+.product-card__swatch__content{
+  padding-top: 10px;
+}
+  .product-card__wrapper{
+    width: 100%;
+  }
+}
+
+
+</style>
+
+
+<style>
+.filter-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 350px;
+    background: white;
+    z-index: 2;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 50px;
+    transform: translateX(-350px);
+    transition: transform 0.5s;
+}
+.filter-wrapper.active{
+  transform: translateX(0);
+}
+/* width */
+.filter-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.filter-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.filter-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.filter-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.filter-content{
+
+}
+.filter-form{
+
+}
+.active-filters{
+    padding-bottom: 15px;
+}
+.active-filters__remove-filter{
+    display: inline-block;
+    background: rgba(0,0,0,.05);
+    text-decoration: none;
+    padding: 8px;
+    font-size: 13px;
+    border-radius: 4px;
+    margin: 0 6px 6px 0px;
+    position: relative;
+    padding-right: 18px;
+}
+.active-filters__remove-filter span{
+position: absolute;
+top: 0;
+right: 0;
+    width: 18px;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+pointer-events: none;
+}
+.active-filters__remove-filter span svg{
+
+}
+.active-filters__clear-wrapper{
+  display: block;
+  padding-top: 10px;
+}
+.active-filters__clear{
+  font-size: 14px;
+}
+.filter-group{
+    display: block;
+    width: 100%;
+}
+.filter-group[open] .filter-arrow svg{
+  transform: rotate(180deg);
+}
+.filter-group-summary{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+        margin-bottom: 8px;
+        cursor: pointer;
+            min-height: 28px;
+}
+.filter-group-summary::-webkit-details-marker {
+  display:none;
+}
+.filter-title{
+    font-size: 14px;
+}
+.filter-arrow{
+
+}
+.filter-group-display{
+
+}
+.filter-group-display__list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.filter-group-display__list-item{
+    padding-bottom: 8px;
+}
+.filter-group-display__list-item label{
+  font-size: 13px;
+}
+.filter-group-display__list-item label[disabled]{
+  opacity: 0.5;
+}
+.filter-group-display__list-item input{
+  margin: 0;
+  margin-right: 10px;
+}
+.filter-group-display__price-range{
+    display: flex;
+    flex-wrap: wrap;
+        padding-bottom: 8px;
+}
+.filter-group-display__price-range-from{
+    width: 50%;
+        padding-right: 5px;
+}
+.filter-group-display__price-range-to{
+    width: 50%;
+        padding-left: 5px;
+}
+.filter-group-display__price-range input{
+width: 100%;
+    display: block;
+    border-radius: 0;
+    border: 1px solid #6e6e6e;
+    font-size: 13px;
+    padding: 5px 5px;
+    margin-top: 3px;
+}
+.filter-group-display__price-range label{
+font-size: 13px;
+}
+
+
+.sort-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    background: white;
+    z-index: 2;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 50px;
+        transform: translateX(350px);
+    transition: transform 0.5s;
+}
+.sort-wrapper.active{
+  transform: translateX(0);
+}
+.sort-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sort-list__item{
+}
+.sort-list__inp{
+  display: none;
+}
+.sort-list__inp + label{
+  display: block;
+      font-size: 14px;
+    min-height: 28px;
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+}
+.sort-list__inp:checked + label{
+background: rgba(112,113,115,.06);
+}
+
+
+
+.main-collection__overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+    background-color: #00000052;
+  z-index: 1;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.5s;
+}
+.main-collection__overlay--active{
+opacity: 1;
+}
+
+.main-collection__tools{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 50px 20px 50px;
+}
+.main-collection__tools-btn{
+display: inline-flex;
+background: none;
+border: 0;
+align-items: center;
+padding: 0;
+cursor: pointer;
+}
+.main-collection__tools-btn svg{
+  height: 20px;
+  margin-right: 5px;
+}
+body{
+  margin: 0;
+}
+
+@media screen and (max-width: 767px){
+  .filter-wrapper, .sort-wrapper{
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 480px){
+  .filter-wrapper, .sort-wrapper{
+    width: 300px;
+  }
+}
+</style>
+
+  {%- assign activeFilters = false -%}
+  {%- for filter in collection.filters -%}
+    {%- if filter.type == "price_range" -%}
+      {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+        {%- assign activeFilters = true -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if filter.active_values.size > 0 -%}
+        {%- assign activeFilters = true -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+
+<div class="main-collection__tools">
+  <button type="button" data-toggle="filter-wrapper" class="main-collection__tools-btn">{% render 'icon-filter' %}Filter</button>
+  <button type="button" data-toggle="sort-wrapper" class="main-collection__tools-btn">{% render 'icon-sort' %}Sort</button>
+</div>
+<div class="main-collection__overlay">.</div>
+
+<div class="filter-wrapper">
+  <div class="filter-content">  
+    <form class="filter-form">
+      {%- if activeFilters -%}
+        <div class="active-filters">
+        {%- for filter in collection.filters -%}
+          {%- if filter.type == "price_range" -%}
+            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+              <a class="active-filters__remove-filter" href="{{ filter.url_to_remove }}">
+                {%- assign min_value = filter.min_value.value | default: 0 -%}
+                {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                {{ min_value | money }} - {{ max_value | money }} <span>{% render 'icon-close-small' %}</span>
+              </a>
+            {%- endif -%}
+          {%- else -%}
+            {%- for filter_value in filter.active_values -%}
+              <a class="active-filters__remove-filter" href="{{ filter_value.url_to_remove }}">
+                {{ filter_value.label }} <span>{% render 'icon-close-small' %}</span>
+              </a>
+            {%- endfor -%}
+          {%- endif- %}
+        {%- endfor -%}
+    <div class="active-filters__clear-wrapper">
+    <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="active-filters__clear">Clear all</a>
+    </div>
+  </div>
+  {%- endif -%}
+  {%- for filter in collection.filters -%}
+  {% assign collapse = false %}
+  {%- for filter_value in filter.values -%}
+  {%- for active_value in filter.active_values -%}
+  {%- if active_value.label == filter_value.label -%}
+  {%- assign collapse = true -%}
+  {%- endif -%}
+  {%- endfor -%}
+  {%- endfor -%}
+    <details class="filter-group" {% if collapse %}open{% endif %}>
+      <summary class="filter-group-summary">
+          <span class="filter-title">{{ filter.label }}</span>
+          <span class="filter-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><title>Down</title><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+      </summary>
+
+
+
+
+      <div class="filter-group-display">
+        {%- case filter.type -%}
+          {%- when 'boolean' or 'list' -%}
+            <ul class="filter-group-display__list">
+              {%- for filter_value in filter.values -%}
+                <li class="filter-group-display__list-item">
+                  <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}>
+                  <input type="checkbox"
+                    name="{{ filter_value.param_name }}"
+                    value="{{ filter_value.value }}"
+                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                    class="filter-group-input"
+                    {% if filter_value.active -%}checked{%- endif %}
+                    {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
+                  >{{ filter_value.label }}</label>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- when 'price_range' -%}
+            <div class="filter-group-display__price-range">
+              <div class="filter-group-display__price-range-from">
+                <label for="Filter-{{ filter.min_value.param_name }}">From</label>
+                <input name="{{ filter.min_value.param_name }}"
+                  id="Filter-{{ filter.min_value.param_name }}"
+                  {% if filter.min_value.value -%}
+                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                  {%- endif %}
+                  type="number"
+                  placeholder="0"
+                  min="0"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                  class="filter-group-input"
+                >
+              </div>
+              <div class="filter-group-display__price-range-to">
+                {%- comment -%} <span>{{ cart.currency.symbol }}</span> {%- endcomment -%}
+                <label for="Filter-{{ filter.max_value.param_name }}">To</label>
+                <input name="{{ filter.max_value.param_name }}"
+                  id="Filter-{{ filter.max_value.param_name }}"
+                  {% if filter.max_value.value -%}
+                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                  {%- endif %}
+                  type="number"
+                  placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                  min="0"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                  class="filter-group-input"
+                >
+              </div>
+            </div>
+        {%- endcase -%}
+      </div>
+    </details>
+  {%- endfor -%}
+
+
+</form>
+
+  </div>
+</div>
+
+<div class="sort-wrapper">
+  <form class="sort-form">
+  <ul class="sort-list">
+    {% for option in collection.sort_options %}
+    <li class="sort-list__item">
+      <input type="radio" name="sort_by" value="{{ option.value }}" id="{{ option.value }}" class="sort-list__inp" {% if collection.sort_by == option.value %}checked{% endif %}>
+      <label for="{{ option.value }}">{{ option.name }}</label>
+      </li>
+    {% endfor %}
+  </ul>
+  </form>
+</div>
+
+
+
+<div class="main-collection__products">
+{% for product in collection.products %}
+{% render 'product-card', product: product %} 
+{% endfor %}
+</div>
+
+
+
+
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+    var selectCallback = function(variant, selector) {
+      console.log(variant.featured_image, variant);
+      if(variant.featured_image != null){
+    let imgExist = false;
+    selector.variantIdField.parentElement.closest(".product-card").querySelectorAll(".product-card__media-image").forEach(function(img){
+      if(img.getAttribute("data-image-id") == variant.featured_image.id){
+        imgExist = true;
+      }
+    });
+
+if(imgExist){
+    selector.variantIdField.parentElement.closest(".product-card").querySelectorAll(".product-card__media-image").forEach(function(img){
+      img.style.display = "none";
+    });
+    selector.variantIdField.parentElement.closest(".product-card").querySelector(`.product-card__media-image[data-image-id="${variant.featured_image.id}"]`).style.display = "block";
+}
+      }
+    }
+    var all_products = { {% for product in collection.products %}'{{ product.handle }}': {{ product | json }},{% endfor %} };
+    for(curr_product in all_products){
+         new Shopify.OptionSelectors(curr_product, {
+            product: all_products[curr_product],
+            onVariantSelected: selectCallback,
+            enableHistoryState: false
+        }); 
+    }
+
+    document.querySelectorAll(".product-card__swatch").forEach(function(input){
+      input.addEventListener("change", function(){
+        let option = this.getAttribute("data-option");
+        let select = this.closest(".product-card").querySelector(`.single-option-selector[data-option="${option}"]`);
+        select.value = this.value;
+        select.dispatchEvent(new Event('change'));
+      });
+    });
+
+
+    document.addEventListener('lazybeforeunveil', function(e){
+    //console.log(e);
+      e.target.closest(".product-card__media").classList.add("product-card--loaded");
+      e.target.closest(".product-card__media-wrapper").classList.add("product-card--loaded");
+    setTimeout(function(){
+      e.target.closest(".product-card__media").classList.remove("product-card--progress");
+      e.target.closest(".product-card__media-wrapper").classList.remove("product-card--loading");
+    }, 1000);
+  });
+
+
+
+
+    document.addEventListener("change", function(e){
+      if(e.target.classList.contains("filter-group-input") || e.target.classList.contains("sort-list__inp")){
+        let wrapper = document.querySelector(".filter-wrapper");
+        let grid = document.querySelector(".main-collection__products");
+        let filterUrl = new URLSearchParams(Array.from(new FormData(document.querySelector(".filter-form")))).toString();
+        let sortUrl = new URLSearchParams(Array.from(new FormData(document.querySelector(".sort-form")))).toString();
+        let url = '/collections/{{collection.handle}}?';
+        url += sortUrl != "" ? filterUrl + '&' + sortUrl : filterUrl;
+        console.log(url);
+        fetch(url, {
+          method: 'GET',
+          mode: 'no-cors'
+        })
+        .then(function(response){
+          return response.text();
+        })
+        .then(function(html){
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          wrapper.innerHTML = doc.querySelector(".filter-wrapper").innerHTML;
+          grid.innerHTML = doc.querySelector(".main-collection__products").innerHTML;
+          window.history.pushState({}, "", url);
+          console.log("success");
+        })
+        .catch(function(error){
+            console.error('Error:', error);
+        });
+      }
+    });
+
+    document.addEventListener("click", function(e){
+      if(e.target.classList.contains("active-filters__remove-filter") || e.target.classList.contains("active-filters__clear")){
+        e.preventDefault();
+        let wrapper = document.querySelector(".filter-wrapper");
+        let grid = document.querySelector(".main-collection__products");
+        let url = e.target.getAttribute("href");
+        console.log(url);
+        fetch(url, {
+          method: 'GET',
+          mode: 'no-cors'
+        })
+        .then(function(response){
+          return response.text();
+        })
+        .then(function(html){
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          wrapper.innerHTML = doc.querySelector(".filter-wrapper").innerHTML;
+          grid.innerHTML = doc.querySelector(".main-collection__products").innerHTML;
+          window.history.pushState({}, "", url);
+          console.log("success");
+        })
+        .catch(function(error){
+            console.error('Error:', error);
+        });
+      }
+    });
+
+
+    document.querySelectorAll(".main-collection__tools-btn").forEach(function(item){
+      item.addEventListener("click", function(){
+        let wrapper = "." + this.getAttribute("data-toggle");
+        document.querySelector(wrapper).classList.add("active");
+      let overlay = document.querySelector(".main-collection__overlay");
+      overlay.style.display = "block";
+      setTimeout(function(){
+        overlay.classList.add("main-collection__overlay--active");
+      }, 50);
+      });
+    });
+
+
+    document.querySelector(".main-collection__overlay").addEventListener("click", function(){
+      let overlay = this;
+      overlay.classList.remove("main-collection__overlay--active");
+      setTimeout(function(){
+        overlay.style.display = "none";
+      }, 500);
+      document.querySelector(".filter-wrapper").classList.remove("active");
+      document.querySelector(".sort-wrapper").classList.remove("active");
+    });
+
+</script>
+
+
+
+{%- comment -%} {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+var selectCallback = function(variant, selector) {
+  console.log(variant, selector);
+}
+new Shopify.OptionSelectors('product-select', {
+  product: {{ product | json }},
+  onVariantSelected: selectCallback,
+  enableHistoryState: true
+});
+</script> {%- endcomment -%}

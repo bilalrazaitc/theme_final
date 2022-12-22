@@ -1,0 +1,106 @@
+<div class="list-collection">
+    <div class="list-collection__container">
+        <h2 class="text--center heading--underline mb--30">{{ section.settings.heading }}</h2>
+        <div class="list-collection__flex-container">
+        {% for collection in section.settings.collections %}
+            <div class="list-collection__item mt--30">
+                <a href="{{ collection.url }}" class="collection-list__item-link">
+                    {{ collection | image_url: width: 2000 | image_tag: class:'lazyload list-collection__image' }}
+                    <div class="list-collection__overlay"></div>
+                </a>
+                <h3 class="mt--10">{{ collection.title }}</h3>
+                <a href="{{ collection.url }}" class="list-collection__link">See all</a>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ section.settings.link }}" class="btn btn--primary list-collection__btn m--auto mt--30 d--flex align--center justify--center">{{ section.settings.link_text }}</a>
+    </div>
+</div>
+
+<style>
+.list-collection{
+
+}
+.list-collection__container{
+padding: 45px;
+}
+.list-collection__flex-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.list-collection__item{
+flex: 0 0 33.33%;
+padding: 5px;
+text-align: center;
+}
+.list-collection__item h3{
+text-align: center;
+padding: 25px 0 15px 0;
+margin: 0;
+}
+.collection-list__item-link{
+
+}
+.list-collection__image{
+
+}
+.list-collection__overlay{
+
+}
+.list-collection__link{
+    text-decoration: none;
+}
+.list-collection__btn{
+}
+
+@media screen and (max-width: 767px){
+    .list-collection__item {
+    flex: 0 0 50%;
+    }
+    .list-collection__container {
+        padding: 25px;
+    }
+}
+
+@media screen and (max-width: 490px){
+    .list-collection__item {
+    flex: 0 0 100%;
+    }
+}
+</style>
+
+{% schema %}
+{
+    "name": "List Collection",
+   "settings": [
+   {
+    "type": "text",
+    "id": "heading",
+    "label": "Heading",
+    "default": "Collection List"
+  },
+   {
+    "type": "collection_list",
+    "id": "collections",
+    "label": "Select Collections"
+  },
+  {
+   "type": "text",
+   "id": "link_text",
+   "label": "Link Text",
+   "default": "Shop Collections"
+ },
+ {
+  "type": "url",
+  "id": "link",
+  "label": "Link"
+}
+   ],
+  "presets": [
+    {
+        "category": "List Collection",
+        "name":"List Collection"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% render 'featured-collection' %}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags -%} &ndash; tagged "{{ current_tags | join: ', ' }}"{%- endif -%}
+      {%- if current_page != 1 -%} &ndash; Page {{ current_page }}{%- endif -%}
+      {%- unless page_title contains shop.name -%} &ndash; {{ shop.name }}{%- endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    
+
+    {% style %}
+    
+
+
+
+{{settings.type_body_font | font_face: font_display: 'swap'}}
+{{settings.type_header_font | font_face: font_display: 'swap'}}
+:root {
+    --font-body-family: {{settings.type_body_font.family}}, {{settings.type_body_font.fallback_families}};
+    --font-body-style: {{settings.type_body_font.style}};
+    --font-body-weight: {{settings.type_body_font.weight}};
+    --font-body-weight-bold: {{settings.type_body_font.weight | plus: 300 | at_most: 1000}};
+
+    --font-heading-family: {{settings.type_header_font.family}}, {{settings.type_header_font.fallback_families}};
+    --font-heading-style: {{settings.type_header_font.style}};
+    --font-heading-weight: {{settings.type_header_font.weight}};
+
+    --font-body-size: {{settings.body_size}}px;
+    --font-heading-size: {{settings.heading_size}}px;
+}
+
+
+
+{% endstyle %}
+
+    {{ 'global.css' | asset_url | stylesheet_tag }}
+
+    {% render 'meta-tags' %}
+
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer="defer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" integrity="sha512-q583ppKrCRc7N5O0n2nzUiJ+suUv7Et1JGels4bXOaMFQcamPk9HjdUknZuuFjBNs7tsMuadge5k9RzdmO+1GQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer="defer"></script>
+    <script src="{{ 'drawer.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    {% section 'header' %}
+    <main id="MainContent" class="main">
+      {{ content_for_layout }}
+    </main>
+    {% section 'footer' %}
+    
+{%- comment -%} {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+var selectCallback = function(variant, selector) {
+  console.log(variant);
+}
+</script> {%- endcomment -%}
+
+  </body>
+</html>
