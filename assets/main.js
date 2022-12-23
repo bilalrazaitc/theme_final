@@ -264,6 +264,21 @@ collage_overlay.forEach(function(overlay){
     document.querySelector("#search").addEventListener("input", delay(function(e){
         if(e.target.value.length >= 2){
             console.log("val", e.target.value);
+            fetch(window.Shopify.routes.root + `search/suggest.json?q=${e.target.value}&resources[type]=product&resources[options][unavailable_products]=hide&resources[options][fields]=title,product_type,variants.title`)
+  .then((response) => {
+    requestResponse = response;
+    return response.json();
+   })
+  .then((text) => {
+    if (!requestResponse.ok) {
+      throw new Error(`${requestResponse.status}: ${text}`);
+    }
+
+    console.log(text);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
         }
         else{
             console.log("empty ");
