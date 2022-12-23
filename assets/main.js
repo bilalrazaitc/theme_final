@@ -264,7 +264,7 @@ collage_overlay.forEach(function(overlay){
     document.querySelector("#search").addEventListener("input", delay(function(e){
         if(e.target.value.length >= 2){
             console.log("val", e.target.value);
-            fetch(window.Shopify.routes.root + `search/suggest.json?q=${e.target.value}&resources[type]=product&resources[options][unavailable_products]=hide&resources[options][fields]=title,product_type,variants.title`)
+            fetch(window.Shopify.routes.root + `search/suggest.json?q=${e.target.value}&resources[type]=product,collection,article,page&resources[options][unavailable_products]=hide`)
   .then((response) => {
     requestResponse = response;
     return response.json();
