@@ -1,0 +1,58 @@
+<div class="account-form">
+  <div class="account-form__wrapper">
+    <h1 class="account-form__title">Register</h1>
+    {%- form 'create_customer', class: 'account-form__form' -%}
+      {%- if form.errors -%}
+        <div class="account-form__validation">
+          <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      <div class="field">
+        <div class="field__group">
+          <label for="register-first-name" class="field__label">First name</label>
+          <input
+            id="register-first-name"
+            type="text"
+            name="customer[first_name]"
+            value="{% if form.first_name %}{{ form.first_name }}{% endif %}"
+            class="field__input"
+            required />
+        </div>
+        <div class="field__group">
+          <label for="register-last-name" class="field__label">Last name</label>
+          <input
+            id="register-last-name"
+            type="text"
+            name="customer[last_name]"
+            value="{% if form.first_name %}{{ form.last_name }}{% endif %}"
+            class="field__input"
+            required />
+        </div>
+        <div class="field__group">
+          <label for="register-email" class="field__label">Email</label>
+          <input
+            id="register-email"
+            type="email"
+            name="customer[email]"
+            value="{% if form.email %}{{ form.email }}{% endif %}"
+            class="field__input {% if form.errors contains 'email' %}field__input--error{% endif %}"
+            required />
+        </div>
+        <div class="field__group">
+          <label for="register-password" class="field__label">Password</label>
+          <input
+            id="register-password"
+            type="password"
+            name="customer[password]"
+            value=""
+            class="field__input {% if form.errors contains 'password' %}field__input--error{% endif %}"
+            required />
+        </div>
+        <div class="field__group">
+          <button type="submit" class="btn btn--primary btn--block">Create</button>
+        </div>
+      </div>
+    {%- endform -%}
+  </div>
+</div>

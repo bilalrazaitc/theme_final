@@ -1,0 +1,90 @@
+<div class="account-form">
+  <div class="account-form__wrapper">
+    {%- form 'recover_customer_password', id: 'recover', class: 'account-form__form' -%}
+      {% assign recover_success = form.posted_successfully? %}
+      <h1 class="account-form__title">Reset your password</h1>
+      {%- if form.errors -%}
+        <div class="account-form__validation">
+          <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      <div class="field__group">
+        <label for="contact-phone" class="field__label">Email</label>
+        <input
+          id="contact-phone"
+          type="email"
+          name="email"
+          value=""
+          class="field__input {% if form.errors %}field__input--error{% endif %}"
+          required />
+      </div>
+      <div class="field__group">
+        <button type="submit" class="btn btn--primary btn--block">Submit</button>
+      </div>
+      <div class="field__group text--center">
+        <a href="#login">
+          Cancel
+        </a>
+      </div>
+    {%- endform -%}
+    {%- form 'customer_login', id: 'login__form', class: 'account-form__form' -%}
+      <h1 class="account-form__title">Login</h1>
+      {%- if form.errors -%}
+        <div class="account-form__validation">
+          <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      {%- if recover_success == true -%}
+        <div class="account-form__validation">
+          <p class="account-form--success">{% render 'icon-success' %} We've sent you an email with a link to update your password.</p>
+        </div>
+      {%- endif -%}
+      <div class="field">
+        <div class="field__group">
+          <label for="contact-phone" class="field__label">Email</label>
+          <input
+            id="contact-phone"
+            type="email"
+            name="customer[email]"
+            value=""
+            class="field__input {% if form.errors contains 'form' %}field__input--error{% endif %}"
+            required />
+        </div>
+        {%- if form.password_needed -%}
+          <div class="field__group">
+            <label for="contact-phone" class="field__label">Password</label>
+            <input
+              id="contact-phone"
+              type="password"
+              name="customer[password]"
+              value=""
+              class="field__input {% if form.errors contains 'form' %}field__input--error{% endif %}"
+              required />
+          </div>
+        {%- endif -%}
+        <div class="field__group">
+          <a href="#recover">
+            Forgot your password?
+          </a>
+        </div>
+        <div class="field__group">
+          <button type="submit" class="btn btn--primary btn--block">Login</button>
+        </div>
+        <div class="field__group text--center">
+          <a href="{{ routes.account_register_url }}">
+            Create account
+          </a>
+        </div>
+      </div>
+    {%- endform -%}
+    {%- if shop.checkout.guest_login -%}
+      {%- form 'guest_login' -%}
+        <div class="field__group">
+          <button type="submit" class="btn btn--primary btn--block">Login as a guest</button>
+        </div>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+</div>

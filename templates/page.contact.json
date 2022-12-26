@@ -1,5 +1,5 @@
 {
-  "wrapper": "div.abc",
+  "wrapper": "div.main-contact__wrapper",
   "sections": {
     "main": {
       "type": "main-page",

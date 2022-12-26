@@ -1,6 +1,10 @@
 *{
     box-sizing: border-box;
 }
+body{
+  padding: 0;
+  margin: 0;
+}
 h1,
 h2,
 h3,
@@ -35,6 +39,14 @@ p,a,ul,li,div,dl,article,section,button,label,input{
   line-height: normal;
   word-break: break-word;
   font-size: var(--font-body-size);
+}
+ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+svg{
+  height: 18px;
 }
 /* a:empty,
 ul:empty,
@@ -90,6 +102,40 @@ cursor: pointer;
   min-width: 100%;
 }
 
+
+.account-form {
+  padding: 50px 40px;
+}
+.account-form__wrapper{
+
+}
+.account-form__title {
+  text-align: center;
+  padding: 0 10px;
+}
+.account-form__form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.account-form--success{
+
+}
+.account-form--error{
+
+}
+.account-form__validation{
+  padding: 0 10px;
+  margin-bottom: 20px;
+}
+.account-form__validation svg{
+  vertical-align: sub;
+}
+.account-form__validation .error{
+  color: red;
+}
+
+
+
 .field {}
 .field--flex {
   display: flex;
@@ -113,7 +159,50 @@ cursor: pointer;
   outline: 0;
   padding: 10px;
   width: 100%;
+  border: 1px solid black;
+}
+.field__input--error{
+border-color: red;
 }
 .field__input--area {
   height: auto;
+}
+
+.text--center{
+  text-align: center;
+}
+
+.login__wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+#recover {
+  display: none;
+}
+#login:target {
+  display: block;
+}
+#recover:target {
+  display: block;
+}
+#recover:target + #login__form {
+  display: none;
+}
+
+
+
+.main-page {}
+.main-page__wrapper {
+  padding: 50px;
+  width: 100%;
+}
+.main-page__title {
+  text-align: center;
+}
+.main-page__content {}
+
+@media screen and (max-width: 767px) {
+  .account-form {
+    padding: 30px 20px;
+  }
 }
