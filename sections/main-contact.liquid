@@ -5,7 +5,7 @@
         <div class="account-form__validation">
           <p class="account-form--success">{% render 'icon-success' %} Thanks for contacting us. We'll get back to you as soon as possible.</p>
         </div>
-      {%- else -%}
+      {%- elsif form.errors -%}
         <div class="account-form__validation">
           <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
           {{ form.errors | default_errors }}

@@ -1,6 +1,6 @@
 <div class="account-form">
   <div class="account-form__wrapper">
-    <h1 class="account-form__title">Register</h1>
+    <h1 class="account-form__title heading--underline">Register</h1>
     {%- form 'create_customer', class: 'account-form__form' -%}
       {%- if form.errors -%}
         <div class="account-form__validation">
@@ -51,6 +51,11 @@
         </div>
         <div class="field__group">
           <button type="submit" class="btn btn--primary btn--block">Create</button>
+        </div>
+        <div class="field__group text--center">
+          <p>Already have an account?
+            <a href="{{ routes.account_login_url }}">Login here!</a>
+          </p>
         </div>
       </div>
     {%- endform -%}

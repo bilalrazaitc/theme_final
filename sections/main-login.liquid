@@ -2,34 +2,37 @@
   <div class="account-form__wrapper">
     {%- form 'recover_customer_password', id: 'recover', class: 'account-form__form' -%}
       {% assign recover_success = form.posted_successfully? %}
-      <h1 class="account-form__title">Reset your password</h1>
+      <h1 class="account-form__title heading--underline">Reset your password</h1>
+      <p class="account-form__subtitle">We will send you an email to reset your password.</p>
       {%- if form.errors -%}
         <div class="account-form__validation">
           <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
           {{ form.errors | default_errors }}
         </div>
       {%- endif -%}
-      <div class="field__group">
-        <label for="contact-phone" class="field__label">Email</label>
-        <input
-          id="contact-phone"
-          type="email"
-          name="email"
-          value=""
-          class="field__input {% if form.errors %}field__input--error{% endif %}"
-          required />
-      </div>
-      <div class="field__group">
-        <button type="submit" class="btn btn--primary btn--block">Submit</button>
-      </div>
-      <div class="field__group text--center">
-        <a href="#login">
-          Cancel
-        </a>
+      <div class="field">
+        <div class="field__group">
+          <label for="contact-phone" class="field__label">Email</label>
+          <input
+            id="contact-phone"
+            type="email"
+            name="email"
+            value=""
+            class="field__input {% if form.errors %}field__input--error{% endif %}"
+            required />
+        </div>
+        <div class="field__group">
+          <button type="submit" class="btn btn--primary btn--block">Submit</button>
+        </div>
+        <div class="field__group text--center">
+          <a href="#login">
+            Cancel
+          </a>
+        </div>
       </div>
     {%- endform -%}
     {%- form 'customer_login', id: 'login__form', class: 'account-form__form' -%}
-      <h1 class="account-form__title">Login</h1>
+      <h1 class="account-form__title heading--underline">Login</h1>
       {%- if form.errors -%}
         <div class="account-form__validation">
           <p class="account-form--error">{% render 'icon-error' %} Please adjust the following:</p>
@@ -54,7 +57,9 @@
         </div>
         {%- if form.password_needed -%}
           <div class="field__group">
-            <label for="contact-phone" class="field__label">Password</label>
+            <label for="contact-phone" class="field__label field__label--flex">Password
+              <a href="#recover">Forgot your password?</a>
+            </label>
             <input
               id="contact-phone"
               type="password"
@@ -64,11 +69,6 @@
               required />
           </div>
         {%- endif -%}
-        <div class="field__group">
-          <a href="#recover">
-            Forgot your password?
-          </a>
-        </div>
         <div class="field__group">
           <button type="submit" class="btn btn--primary btn--block">Login</button>
         </div>
