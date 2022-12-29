@@ -1,53 +1,89 @@
-{% comment %}
-    Renders a set of links for paginated results. Must be used within paginate tags.
-
-    Usage:
-    {% paginate results by 2 %}
-      {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
-    {% endpaginate %}
-
-    Accepts:
-    - paginate: {Object}
-    - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
-{% endcomment %}
-
-<link rel="stylesheet" href="{{ 'component-pagination.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'component-pagination.css' | asset_url | stylesheet_tag }}</noscript>
-
 {%- if paginate.parts.size > 0 -%}
-  <div class="pagination-wrapper">
-    <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
-      <ul class="pagination__list list-unstyled" role="list">
-      {%- if paginate.previous -%}
-        <li>
-          <a href="{{ paginate.previous.url }}{{ anchor }}" class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.previous' | t }}">
-            {% render 'icon-caret' %}
-          </a>
-        </li>
-      {%- endif -%}
+  <div class="pagination">
+    <nav class="pagination__wrapper">
+      <ul class="pagination__list">
+        {%- if paginate.previous -%}
+          <li>
+            <a href="{{ paginate.previous.url }}" class="pagination__prev">{% render 'icon-caret' %}</a>
+          </li>
+        {%- endif -%}
 
-      {%- for part in paginate.parts -%}
-        <li>
-          {%- if part.is_link -%}
-            <a href="{{ part.url }}{{ anchor }}" class="pagination__item link" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
-          {%- else -%}
-            {%- if part.title == paginate.current_page -%}
-              <span class="pagination__item pagination__item--current" aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+        {%- for part in paginate.parts -%}
+          <li>
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}"class="pagination__item pagination__link">{{ part.title }}</a>
             {%- else -%}
-              <span class="pagination__item">{{ part.title }}</span>
+              <span class="pagination__item {% if part.title == paginate.current_page %}pagination__current{% endif %}">{{ part.title }}</span>
             {%- endif -%}
-          {%- endif -%}
-        </li>
-      {%- endfor -%}
+          </li>
+        {%- endfor -%}
 
-      {%- if paginate.next -%}
-        <li>
-          <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce" aria-label="{{ 'general.pagination.next' | t }}" >
-            {%- render 'icon-caret' -%}
-          </a>
-        </li>
-      {%- endif -%}
+        {%- if paginate.next -%}
+          <li>
+            <a href="{{ paginate.next.url }}" class="pagination__next">{%- render 'icon-caret' -%}</a>
+          </li>
+        {%- endif -%}
       </ul>
     </nav>
   </div>
 {%- endif -%}
+
+<style>
+  .pagination {}
+  .pagination__wrapper {
+    padding-top: 50px;
+  }
+  .pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+  .pagination__prev {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #0000008c;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+    transform: rotate(90deg);
+  }
+  .pagination__prev svg {
+    height: 12px;
+    width: 12px;
+  }
+  .pagination__item {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #0000008c;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+  }
+  .pagination__link {
+    text-decoration: none;
+  }
+  .pagination__current {
+    background: #0000008c;
+    color: white;
+  }
+  .pagination__next {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #0000008c;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+    transform: rotate(-90deg);
+  }
+  .pagination__next svg {
+    height: 12px;
+    width: 12px;
+  }
+</style>
