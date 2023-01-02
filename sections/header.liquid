@@ -161,6 +161,7 @@
         placeholder="Enter keyword"
         class="search__input" />
     </div>
+    <div class="search__content"></div>
   </div>
 </header>
 
@@ -798,6 +799,7 @@
     width: 25px;
     height: 25px;
     vertical-align: middle;
+    pointer-events: none;
   }
   .header__icons--cart svg {
     width: 40px;
@@ -1037,13 +1039,19 @@
   .search {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    right: 0;
+    width: 500px;
     background: white;
     display: none;
+    padding: 0;
+    border: 1px solid #0000003d;
+    border-top: 0;
+  }
+  .search.active {
+    display: block;
   }
   .search__wrapper {
-    padding: 0 30px 20px;
+    padding: 0 20px 20px;
   }
   .search__input {
     display: block;
@@ -1053,6 +1061,17 @@
     border: 1px solid #0000004a;
     padding: 0 15px;
     outline: 0;
+  }
+  .search__content {
+    display: none;
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 0;
+    padding: 20px;
+    border-top: 1px solid #0000003d;
+  }
+  .search__content.active {
+    display: block;
   }
 
 
@@ -1092,7 +1111,6 @@
     }
   }
 </style>
-
 
 {% schema %}
   {

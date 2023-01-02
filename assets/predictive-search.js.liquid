@@ -1,0 +1,46 @@
+let search_button = document.querySelector(".header__icons--search");
+let search_wrapper = document.querySelector(".search");
+search_button.addEventListener("click", e => {
+  search_wrapper.classList.toggle("active");
+});
+let search_content = document.querySelector(".search__content");
+let search_input = document.querySelector(".search__input");
+let searchRequestResponse;
+search_input.addEventListener("input", delay(function(e) {
+  if (search_input.value.length > 1) {
+    fetch(window.Shopify.routes.root + `search/suggest?q=${
+      search_input.value
+    }&resources[type]=product,page,collection,article&resources[options][unavailable_products]=hide&section_id=predictive-search`).then((response) => {
+      searchRequestResponse = response;
+      return response.text();
+    }).then((text) => {
+      if (! searchRequestResponse.ok) {
+        throw new Error(`${
+          searchRequestResponse.status
+        }: ${text}`);
+      }
+      const searchResult = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-predictive-search').innerHTML;
+      search_content.innerHTML = searchResult;
+    }).catch((error) => {
+      console.error(error);
+    });
+    search_content.classList.add("active");
+  } else {
+    search_content.classList.remove("active");
+  }
+}, 500));
+
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("predictive-search_tabs-title")) {
+    document.querySelectorAll(".predictive-search__block").forEach(function(item) {
+      item.classList.remove("active");
+    });
+    document.querySelectorAll(".predictive-search_tabs-title").forEach(function(item) {
+      item.classList.remove("active");
+    });
+    e.target.classList.add("active");
+    document.querySelector(`.predictive-search__block[data-nav="${
+      e.target.dataset.tab
+    }"]`).classList.add("active");
+  }
+});
