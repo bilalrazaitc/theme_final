@@ -1,50 +1,3 @@
-let sliderNextButton = document.querySelectorAll(".image-with-text-overlay__slider--next");
-let sliderPrevButton = document.querySelectorAll(".image-with-text-overlay__slider--prev");
-for (const btn of sliderNextButton) {
-    btn.addEventListener("click", function(e){
-        let slideContainer = this.closest(".image-with-text-overlay__container");
-        let slides = slideContainer.querySelectorAll(".image-with-text-overlay__slide");
-        let activeSlide = slideContainer.querySelector(".image-with-text-overlay__slide.active");
-        let firstSlide = slideContainer.querySelector(".image-with-text-overlay__slide");
-        if(activeSlide.nextElementSibling != null){
-            activeSlide.classList.remove("active");
-            for (const slide of slides) {
-                activeSlide.nextElementSibling.classList.add("active");
-                slide.style.transform = `translate(-${activeSlide.nextElementSibling.getAttribute("data-transform")}%)`;
-            }
-        }
-        else{
-            for (const slide of slides) {
-                slide.classList.remove("active");
-                slide.style.transform = "translate(0)";
-            }
-            firstSlide.classList.add("active");
-        }
-    });
-}
-for (const btn of sliderPrevButton) {
-    btn.addEventListener("click", function(e){
-        let slideContainer = this.closest(".image-with-text-overlay__container");
-        let slides = slideContainer.querySelectorAll(".image-with-text-overlay__slide");
-        let activeSlide = slideContainer.querySelector(".image-with-text-overlay__slide.active");
-        let lastSlide = Array.from(slideContainer.querySelectorAll(".image-with-text-overlay__slide"))[slides.length - 1];
-        if(activeSlide.previousElementSibling != null){
-            activeSlide.classList.remove("active");
-            for (const slide of slides) {
-                activeSlide.previousElementSibling.classList.add("active");
-                slide.style.transform = `translate(-${activeSlide.previousElementSibling.getAttribute("data-transform")}%)`;
-            }
-        }
-        else{
-            for (const slide of slides) {
-                slide.classList.remove("active");
-                slide.style.transform = `translate(-${lastSlide.getAttribute("data-transform")}%)`;
-            }
-            lastSlide.classList.add("active");
-        }
-    });
-}
-
 let megaMenuColl = document.querySelectorAll(".header__dropdown--mega-menu--hover");
 for (const item of megaMenuColl) {
     item.addEventListener("mouseover", function(){
@@ -181,64 +134,6 @@ collage_overlay.forEach(function(overlay){
 //     });
 
 
-    let testimonial_btn_next = document.querySelectorAll(".testimonial__next");
-    testimonial_btn_next.forEach(function(btn){
-        btn.addEventListener("click", function(){
-            let cont = this.closest(".testimonial__flex").querySelector(".testimonial__flex-container");
-            let i = parseInt(cont.getAttribute("data-index"));
-            let t = parseInt(cont.getAttribute("data-length"));
-            if(i<t){
-                console.log(i,t);
-                i++;
-                cont.setAttribute("data-index", i);
-            }
-
-            let pos = parseFloat(this.getAttribute("data-transform"));
-            if(i < t){
-            let inc = pos + 33.33;
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__btn").forEach(function(item){
-                item.setAttribute("data-transform", inc);
-            });
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__flex-item").forEach(function(item){
-                item.setAttribute("style", `left: -${inc}%`);
-            });
-        }
-        else{
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__btn").forEach(function(item){
-                item.setAttribute("data-transform", 0);
-            });
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__flex-item").forEach(function(item){
-                item.setAttribute("style", `left: -${0}%`);
-            });
-            cont.setAttribute("data-index", 2);
-        }
-        });
-    });
-
-    let testimonial_btn_prev = document.querySelectorAll(".testimonial__prev");
-    testimonial_btn_prev.forEach(function(btn){
-        btn.addEventListener("click", function(){
-            let cont = this.closest(".testimonial__flex").querySelector(".testimonial__flex-container");
-            let i = parseInt(cont.getAttribute("data-index"));
-            let t = parseInt(cont.getAttribute("data-length"));
-            if(i>1){
-                console.log(i,t);
-                i--;
-                cont.setAttribute("data-index", i);
-            }
-
-            let pos = parseFloat(this.getAttribute("data-transform"));
-            if(i > 2){
-            let inc = pos - 33.33;
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__btn").forEach(function(item){
-                item.setAttribute("data-transform", inc);
-            });
-            this.closest(".testimonial__flex").querySelectorAll(".testimonial__flex-item").forEach(function(item){
-                item.setAttribute("style", `left: -${inc}%`);
-            });
-        }
-        });
-    });
 
     document.addEventListener('lazybeforeunveil', function(e){
         if(e.target.classList.value.indexOf("product-card__image") != -1){
@@ -261,26 +156,67 @@ collage_overlay.forEach(function(overlay){
         };
     }
 
-    document.querySelector("#search").addEventListener("input", delay(function(e){
-        if(e.target.value.length >= 2){
-            console.log("val", e.target.value);
-            fetch(window.Shopify.routes.root + `search/suggest.json?q=${e.target.value}&resources[type]=product,collection,article,page&resources[options][unavailable_products]=hide`)
-  .then((response) => {
-    requestResponse = response;
-    return response.json();
-   })
-  .then((text) => {
-    if (!requestResponse.ok) {
-      throw new Error(`${requestResponse.status}: ${text}`);
-    }
 
-    console.log(text);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+
+    let popupOverlay = document.querySelector(".popup__overlay");
+    let body = document.querySelector("body");
+    let showOverlay = () => {
+        body.classList.add("overflow__hidden");
+        popupOverlay.style.display = "block";
+        setTimeout(() => {
+            popupOverlay.classList.add("active");
+        }, 10);
+        console.log("asdasdasdasasdasd");
+    }
+    let hideOverlay = () => {
+        popupOverlay.classList.remove("active");
+        setTimeout(() => {
+            popupOverlay.style.display = "none";
+            body.classList.remove("overflow__hidden");
+        }, 260);
+    }
+    popupOverlay.addEventListener("click", e => {
+        let drawerArr = [".search", ".cart-drawer", ".header__mobile"];
+        for(item of drawerArr){
+            document.querySelector(item).classList.remove("active");
+            hideOverlay();
         }
-        else{
-            console.log("empty ");
-        }
-    }, 500));
+        setTimeout(() => {
+            document.querySelector(drawerArr[0]).style.display = "none";
+            document.querySelector(drawerArr[1]).style.display = "none";
+            document.querySelector(drawerArr[2]).style.display = "none";
+        }, 260);
+    });
+    
+
+
+
+    assignRows = (cards) => {
+        let odd = true;
+        [...cards.children].forEach((el) => {
+            el.className = 'header__menu-li';
+            if (!el.previousElementSibling || el.offsetLeft < el.previousElementSibling.offsetLeft) {
+                odd = !odd;
+            }
+            if(odd){
+                el.parentElement.classList.add("wrapped");
+                el.style.background = "red";
+            }
+            else{
+                el.parentElement.classList.remove("wrapped");
+                el.style.background = "none";
+            }
+        });
+    };
+
+
+    const observer2 = new ResizeObserver((entries) => {
+        entries.forEach((entry) => {
+            assignRows(entry.target);
+        });
+    });
+    
+    const cards = document.querySelector('.header__menu-ul');
+    observer2.observe(cards);
+    assignRows(cards);
+    

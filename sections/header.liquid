@@ -110,7 +110,7 @@
       {%- render 'icon-search' -%}
     </span>
     <span class="header__icons--cart">
-      {% render 'icon-cart-empty' %}
+      {% render 'icon-cart' %}
     </span>
   </div>
 {% endcapture %}
@@ -137,39 +137,38 @@
       {{ header__icons }}
     </div>
     {{ header__menu }}
-  {% elsif section.settings.logo_position == 'header__logo-top-center--with-icons' %}
-    <div class="header__logo-center-with-icons">
-      {{ header__mobile }}
-      {{ header__logo }}
-      {{ header__icons }}
-    </div>
-    {{ header__menu }}
-  {% elsif section.settings.logo_position == 'header__logo-top-left--with-icons' %}
-    <div class="header__logo-left-with-icons">
-      {{ header__mobile }}
-      {{ header__logo }}
-      {{ header__icons }}
-    </div>
-    {{ header__menu }}
   {% endif %}
 
   <div class="search">
-    <div class="search__wrapper">
-      <input
-        id="search"
-        type="search"
-        placeholder="Enter keyword"
-        class="search__input" />
-    </div>
-    <div class="search__content"></div>
+    <form
+      action="{{ routes.search_url }}"
+      method="get"
+      class="search__form">
+      <div class="search__wrapper">
+        <span class="search__icon">{%- render 'icon-search' -%}</span>
+        <input
+          id="search"
+          type="text"
+          name="q"
+          placeholder="What are you looking for?"
+          class="search__input"
+          autocomplete="off" />
+        <input
+          type="hidden"
+          name="options[prefix]"
+          value="last">
+        <button type="button" class="search__close">{% render 'icon-close' %}</button>
+      </div>
+      <div class="search__content"></div>
+      <button type="submit" class="search__submit">View all</button>
+    </form>
   </div>
+
 </header>
 
 
 {%- render 'header-mobile', menu: menu -%}
 
-
-<div class="cart-drawer__overlay"></div>
 <div class="cart-drawer" data-cart-drawer>
   <div class="cart-drawer__wrapper">
     <p class="cart-drawer__title">Your Cart (<span class="cart-drawer__count" data-cart-drawer-count>{{ cart.item_count }}</span>)
@@ -343,9 +342,11 @@
   </div>
 </div>
 
+<div class="popup__overlay"></div>
+
 
 <style>
-  .cart-drawer__overlay {
+  .popup__overlay {
     display: none;
     width: 100%;
     height: 100%;
@@ -353,21 +354,28 @@
     top: 0;
     left: 0;
     background-color: #0000003b;
-    z-index: 2;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+  }
+  .popup__overlay.active {
+    opacity: 1;
   }
   .cart-drawer {
     position: fixed;
     top: 0;
     right: -400px;
-    visibility: hidden;
     width: 400px;
     background: white;
     height: 100%;
     z-index: 2;
-    transition: all 0.2s;
+    display: none;
+    transition: right 0.25s ease-in-out;
+  }
+  .overflow__hidden {
+    overflow: hidden;
   }
   .cart-drawer.active {
-    visibility: visible;
     right: 0;
   }
   .cart-drawer__wrapper {
@@ -797,12 +805,12 @@
   }
   .header__icons--search svg {
     width: 25px;
-    height: 25px;
+    height: 40px;
     vertical-align: middle;
     pointer-events: none;
   }
   .header__icons--cart svg {
-    width: 40px;
+    width: 22px;
     vertical-align: bottom;
     height: 40px;
   }
@@ -1037,63 +1045,222 @@
 
 
   .search {
-    position: absolute;
-    top: 100%;
+    display: none;
+    position: fixed;
+    top: 0;
     right: 0;
     width: 500px;
     background: white;
-    display: none;
-    padding: 0;
-    border: 1px solid #0000003d;
-    border-top: 0;
+    height: 100%;
+    z-index: 2;
+    right: -500px;
+    transition: right 0.25s ease-in-out;
+    border-left: 1px solid #0000003d;
   }
   .search.active {
+    right: 0;
+  }
+  .search__form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .search__submit {
+    flex: 0 0 50px;
+    background: white;
+    border: 0;
+    cursor: pointer;
+    border-top: 1px solid #0000003d;
+    display: none;
+  }
+  .search__submit.active {
     display: block;
   }
   .search__wrapper {
-    padding: 0 20px 20px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #0000003d;
+    display: flex;
+    align-items: center;
   }
   .search__input {
     display: block;
     width: 100%;
     height: 45px;
-    border-radius: 100px;
-    border: 1px solid #0000004a;
-    padding: 0 15px;
+    padding: 0;
     outline: 0;
+    flex-grow: 1;
+    border: 0;
   }
   .search__content {
     display: none;
-    max-height: 500px;
     overflow-y: auto;
     margin-top: 0;
     padding: 20px;
-    border-top: 1px solid #0000003d;
+    flex: 1 1 auto;
+    position: relative;
   }
   .search__content.active {
     display: block;
   }
-
-
-  @media screen and (max-width: 1280px) {
-    .header__menu {
-      display: none;
+  .search__icon {
+    width: 25px;
+    margin-right: 10px;
+  }
+  .search__close {
+    width: 25px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .search__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .search__close svg {
+    width: 100%;
+    height: 15px;
+  }
+  .predictive-search__loader {
+    animation: predictive-search__loader-animate 1s linear infinite;
+    width: 40px;
+    height: 40px;
+    border: 3px solid black;
+    border-radius: 50%;
+    border-left: 3px solid transparent;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes predictive-search__loader-animate {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
     }
-    .header__logo-middle--left .header__logo {
-      flex: 0 0 70%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .header__logo-middle--left .header__icons {
-      flex: 0 0 15%;
-
-    }
-    .header__mobile-wrapper {
-      display: flex;
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
+  .predictive-search__total-count {
+    display: none;
+  }
+  .predictive-search__not-found {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .predictive-search_tabs-wrapper {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .predictive-search_tabs-item {
+    padding-right: 30px;
+    padding-bottom: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+  }
+  .predictive-search_tabs-title {
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .predictive-search_tabs-title.active {
+    border-bottom: 2px solid black;
+  }
+  .predictive-search_tabs-title em {
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    letter-spacing: 0;
+    right: 10px;
+    top: -10px;
+    background: #555;
+    color: white;
+    font-style: normal;
+    text-align: center;
+    line-height: 15px;
+  }
+  .predictive-search__block {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+  }
+  .predictive-search__block.active {
+    display: block;
+  }
+  .predictive-search__item {
+    margin-bottom: 20px;
+  }
+  .predictive-search__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+  }
+  .predictive-search__image-wrapper {
+    width: 30%;
+    padding-right: 20px;
+  }
+  .predictive-search__image {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+  }
+  .predictive-search__svg {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #0000003d;
+    display: block;
+  }
+  .predictive-search__content {
+    width: 70%;
+  }
+  .predictive-search__title {
+    margin: 0;
+  }
+  .predictive-search__vendor {}
+
+  {% comment %}
+    @media screen and (max-width: 1280px) {
+      .header__menu {
+        display: none;
+      }
+      .header__logo-middle--left .header__logo {
+        flex: 0 0 70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .header__logo-middle--left .header__icons {
+        flex: 0 0 15%;
+
+      }
+      .header__mobile-wrapper {
+        display: flex;
+      }
+    }
+  {% endcomment %}
 
   @media screen and (max-width: 767px) {
     .header {
@@ -1127,16 +1294,10 @@
         "options": [
           {
             "value": "header__logo-middle--left",
-            "label": "Middle Left"
+            "label": "Left"
           }, {
             "value": "header__logo-middle--center",
-            "label": "Middle Center"
-          }, {
-            "value": "header__logo-top-center--with-icons",
-            "label": "Top Center"
-          }, {
-            "value": "header__logo-top-left--with-icons",
-            "label": "Top Left"
+            "label": "Center"
           }
         ],
         "default": "header__logo-middle--left"

@@ -166,12 +166,14 @@
 
   mobile_open.addEventListener("click", e => {
     mobile_header.style.display = "block";
+    showOverlay();
     setTimeout(() => {
       mobile_header.classList.add("active");
     }, 10);
   });
   mobile_close.addEventListener("click", e => {
     mobile_header.classList.remove("active");
+    hideOverlay();
     setTimeout(() => {
       mobile_header.style.display = "none";
     }, 260);

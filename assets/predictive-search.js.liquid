@@ -1,32 +1,61 @@
 let search_button = document.querySelector(".header__icons--search");
+let search_close = document.querySelector(".search__close");
 let search_wrapper = document.querySelector(".search");
 search_button.addEventListener("click", e => {
-  search_wrapper.classList.toggle("active");
+  search_wrapper.style.display = "block";
+  showOverlay();
+  setTimeout(() => {
+    search_wrapper.classList.add("active");
+  }, 10);
+});
+search_close.addEventListener("click", e => {
+  search_wrapper.classList.remove("active");
+  hideOverlay();
+  setTimeout(() => {
+    search_wrapper.style.display = "none";
+  }, 260);
 });
 let search_content = document.querySelector(".search__content");
 let search_input = document.querySelector(".search__input");
+let search_submit = document.querySelector(".search__submit");
 let searchRequestResponse;
 search_input.addEventListener("input", delay(function(e) {
   if (search_input.value.length > 1) {
+    search_content.innerHTML = `<span class="predictive-search__loader"></span>`;
     fetch(window.Shopify.routes.root + `search/suggest?q=${
       search_input.value
-    }&resources[type]=product,page,collection,article&resources[options][unavailable_products]=hide&section_id=predictive-search`).then((response) => {
-      searchRequestResponse = response;
-      return response.text();
-    }).then((text) => {
-      if (! searchRequestResponse.ok) {
-        throw new Error(`${
-          searchRequestResponse.status
-        }: ${text}`);
-      }
-      const searchResult = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-predictive-search').innerHTML;
-      search_content.innerHTML = searchResult;
-    }).catch((error) => {
-      console.error(error);
-    });
-    search_content.classList.add("active");
+    }&resources[type]=product,page,collection,article&resources[options][unavailable_products]=last&section_id=predictive-search`)
+      .then((response) => {
+        searchRequestResponse = response;
+        return response.text();
+      })
+      .then((text) => {
+        if (! searchRequestResponse.ok) {
+          throw new Error(`${
+            searchRequestResponse.status
+          }: ${text}`);
+        }
+        const searchResult = new DOMParser().parseFromString(text, 'text/html');
+        search_content.innerHTML = searchResult.querySelector('#shopify-section-predictive-search').innerHTML;
+        return parseInt(searchResult.querySelector(".predictive-search__total-count").innerText);
+      })
+      .then(total => {
+        search_content.classList.add("active");
+        if (total <= 0) {
+          search_submit.classList.remove("active");
+        } else {
+          search_submit.classList.add("active");
+        }
+
+      })
+      .catch((error) => {
+        console.error(error);
+        search__content.innerHTML = ``;
+      });
+
   } else {
     search_content.classList.remove("active");
+    search_submit.classList.remove("active");
   }
 }, 500));
 
