@@ -191,32 +191,5 @@ collage_overlay.forEach(function(overlay){
 
 
 
-    assignRows = (cards) => {
-        let odd = true;
-        [...cards.children].forEach((el) => {
-            el.className = 'header__menu-li';
-            if (!el.previousElementSibling || el.offsetLeft < el.previousElementSibling.offsetLeft) {
-                odd = !odd;
-            }
-            if(odd){
-                el.parentElement.classList.add("wrapped");
-                el.style.background = "red";
-            }
-            else{
-                el.parentElement.classList.remove("wrapped");
-                el.style.background = "none";
-            }
-        });
-    };
 
-
-    const observer2 = new ResizeObserver((entries) => {
-        entries.forEach((entry) => {
-            assignRows(entry.target);
-        });
-    });
-    
-    const cards = document.querySelector('.header__menu-ul');
-    observer2.observe(cards);
-    assignRows(cards);
     
