@@ -1,0 +1,34 @@
+<div class="search">
+  <form
+    action="{{ routes.search_url }}"
+    method="get"
+    class="search__form">
+    <div class="search__wrapper">
+      <span class="search__icon">{%- render 'icon-search' -%}</span>
+      <input
+        id="search"
+        type="text"
+        name="q"
+        placeholder="What are you looking for?"
+        class="search__input"
+        autocomplete="off" />
+      <input
+        type="hidden"
+        name="options[prefix]"
+        value="last">
+      <button type="button" class="search__close">{% render 'icon-close' %}</button>
+    </div>
+    {%- if settings.predictive_search_linklist != blank -%}
+      <ul class="search__menu">
+        <li class="search__menu-title">Popular searches</li>
+        {%- for link in linklists[settings.predictive_search_linklist].links -%}
+          <li class="search__menu-list">
+            <a href="{{- link.url -}}" class="search__menu-link">{{- link.title -}}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    <div class="search__content"></div>
+    <button type="submit" class="search__submit">View all</button>
+  </form>
+</div>

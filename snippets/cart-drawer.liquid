@@ -1,0 +1,165 @@
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__wrapper">
+    <p class="cart-drawer__title">Your Cart (<span class="cart-drawer__count" data-cart-drawer-count>{{ cart.item_count }}</span>)
+      <span class="cart-drawer__close" data-cart-drawer-close>&#10005;</span>
+    </p>
+    <div class="cart-drawer__bar-wrapper">
+      <p
+        class="cart-drawer__bar-text"
+        data-price="{{- settings.drawer_bar_price | times: 100.0 -}}"
+        data-cart-drawer-bar-text>
+        {%- assign cart_total_price = cart.total_price | divided_by: 100.0 -%}
+        {% if cart_total_price >= settings.drawer_bar_price %}
+          {{ settings.drawer_bar_success }}
+        {% else %}
+          {{ settings.drawer_bar_prefix }}
+          <span>{{ settings.drawer_bar_price | minus: cart_total_price | times: 100.0 | money }}</span>
+          {{ settings.drawer_bar_postfix }}
+        {% endif %}
+      </p>
+      <div class="cart-drawer__bar">
+        <div
+          class="cart_drawer__bar-line"
+          style="width: {{ cart_total_price | divided_by: settings.drawer_bar_price | times: 100 }}%;"
+          data-cart-drawer-bar-line></div>
+      </div>
+    </div>
+    <div class="cart-drawer__content-wrapper">
+      <div class="cart-drawer__content">
+        <div class="cart-drawer__content-ajax-wrapper" data-cart-drawer-ajax>
+          {% for item in cart.items %}
+            <div class="cart-drawer__grid" data-item-id="{{ forloop.index }}">
+              <div class="cart-drawer__grid-image">
+                <img src="{{ item.image | img_url: '300x' }}" />
+              </div>
+              <div class="cart-drawer__grid-details">
+                <span class="cart-drawer__grid--remove" data-cart-drawer-remove>&#10005;</span>
+                <a href="{{ item.product.url }}" class="cart-drawer__grid-produt-title">{{ item.product.title }}</a>
+                <p class="cart-drawer__grid-variant-title">{{ item.variant.title }}</p>
+                {%- assign property_size = item.properties | size -%}
+                {%- if property_size > 0 -%}
+                  <ul class="cart-drawer__grid-properties">
+                    {%- for property in item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <li>
+                          <strong>{{ property.first }}</strong>:
+                          {%- if property.last contains '/uploads/' -%}
+                            <a href="{{ property.last }}" target="_blank">{{ property.last | split: '/' | last }}</a>
+                          {%- else -%}
+                            {{ property.last }}
+                          {%- endif -%}
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- for discount in item.discounts -%}
+                  <p class="cart-drawer__grid-discount">{%- render 'icon-discount' -%} {{ discount.title }}</p>
+                {%- endfor -%}
+                <div class="cart-drawer__grid-data">
+                  <div class="cart-drawer__grid-quantity-wrapper">
+                    <span class="cart-drawer__grid-quantity--minus" data-cart-drawer-minus>-</span>
+                    <input
+                      type="number"
+                      value="1"
+                      class="cart-drawer__grid-quantity-input" />
+                    <span class="cart-drawer__grid-quantity--plus" data-cart-drawer-plus>+</span>
+                  </div>
+                  <div class="cart-drawer__grid-price">
+                    {%- if item.original_price != item.final_price -%}
+                      <strike>{{- item.original_price | money -}}</strike>
+                      {{ item.final_line_price | money }}
+                    {%- else -%}
+                      {{ item.original_price | money }}
+                    {%- endif -%}
+                  </div>
+                  <span class="cart-drawer__grid-error" data-cart-drawer-error></span>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="cart-drawer__content-empty">Your cart is empty!</div>
+          {% endfor %}
+        </div>
+        <div class="cart-drawer__content-discount-wrapper">
+          <input
+            type="text"
+            placeholder="eg. Discount Code"
+            data-cart-drawer-discount />
+          <a href="/checkout" data-cart-drawer-apply>Apply</a>
+        </div>
+        <details class="cart-drawer__content-note-wrapper">
+          <summary>Add an optional note</summary>
+          <div>
+            <textarea
+              name=""
+              id=""
+              rows="5"></textarea>
+          </div>
+        </details>
+        {%- assign recommendation = collections[settings.drawer_recommendation_collection] -%}
+        {%- if recommendation != blank and recommendation.products.length > 0 -%}
+          <div class="cart-drawer__recommendation">
+            <p class="cart-drawer__recommendation-title">Frequently Brought Together</p>
+            <div class="cart-drawer__recommendation-wrapper">
+              {% for product in recommendation.products %}
+                <div class="cart-drawer__grid">
+                  <div class="cart-drawer__grid-image">
+                    <img src="{{ product | img_url: '300x' }}" />
+                  </div>
+                  <div class="cart-drawer__grid-details">
+                    <a href="{{ product.url }}" class="cart-drawer__grid-produt-title">{{ product.title }}</a>
+                    <div class="cart-drawer__grid-data">
+                      <div class="cart-drawer__grid-atc-wrapper">
+                        {% form 'product', product, class: 'cart-drawer__grid-atc-form' %}
+                          <div class="cart-drawer__grid-price">{{ product.price | money }}</div>
+                          <input
+                            name="id"
+                            value="{{ product.selected_or_first_available_variant.id }}"
+                            hidden />
+                          <input
+                            name="quantity"
+                            value="1"
+                            hidden />
+                          <button
+                            type="submit"
+                            class="cart-drawer__grid--atc"
+                            {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                            {% if product.selected_or_first_available_variant.available %}Add{% else %}Sold{% endif %}
+                          </button>
+                          <span class="cart-drawer__grid-error" data-cart-drawer-error></span>
+                        {% endform %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__footer-subtotal" data-cart-drawer-total-wrapper>
+          <p>Subtotal</p>
+          <span data-cart-drawer-total>{{ cart.total_price | money }}</span>
+          <em>
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              {%- for discount in cart.cart_level_discount_applications -%}
+                {%- render 'icon-discount' -%}
+                {{ discount.title }}
+                (-{{ discount.total_allocated_amount | money }})
+              {%- endfor -%}
+            {%- endif -%}
+          </em>
+        </div>
+        <p class="cart-drawer__footer-info">Shipping, Taxes, and Discounts calculated at checkout</p>
+        <a href="/collections" class="cart-drawer__footer-shopping">Continue Shopping</a>
+        <a
+          href="/checkout"
+          class="cart-drawer__footer-checkout"
+          data-cart-drawer-checkout>Checkout</a>
+      </div>
+    </div>
+  </div>
+</div>

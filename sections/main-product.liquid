@@ -82,10 +82,7 @@
                       value="{{ value }}"
                       class="main-product__options-input"
                       {% if product_option.selected_value == value %}checked{% endif %} />
-                    <label
-                      for="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}"
-                      {% if isColor %}style="background-color: {{ value }};"{% endif %}
-                      class="{% if isColor %}main-product__options-label--color{% else %}main-product__options-label{% endif %}">
+                    <label for="{{option_title | handleize}}-{{product.id}}-{{value | handleize}}-{{option_index}}" {% if isColor %}style="background-color: {{ value }};"{% endif %}class="{% if isColor %}main-product__options-label--color{% else %}main-product__options-label{% endif %}">
                       {% unless isColor %}
                         {{ value }}{% endunless %}
                     </label>
@@ -108,10 +105,7 @@
               name="id"
               hidden>
               {% for variant in product.variants %}
-                <option
-                  value="{{ variant.id }}"
-                  {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                  data-qty="{{ variant.inventory_quantity }}">
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}data-qty="{{ variant.inventory_quantity }}">
                   {{ variant.title }} - {{ variant.price | money }}
                 </option>
               {% endfor %}
@@ -362,49 +356,49 @@
 <script defer="defer">
   let low_stock = document.querySelector(".product__low-stock");
   let count = 0;
-    let selectCallback = (variant, selector) => {
-      let atc = document.querySelector(".main-product--submit");
-      if(variant != null){
-          atc.innerText = variant.available ? atc.getAttribute("data-instock") : atc.getAttribute("data-soldout");
-          if(variant.featured_image != null){
-            if(count > 0){
-              let slideIndex = document.querySelector(`.product-single__media[data-media-id="${variant.featured_media.id}"]`).closest(".carousel-cell").getAttribute("data-index");
-              var flkty = new Flickity('.main-product__media-wrapper');
-              flkty.select(parseInt(slideIndex));
-            }
-            else{
-              count++;
-            }
-          }
-          document.querySelectorAll(".main-product__options--selected").forEach((item, index) => {
-              item.innerText = variant.options[index];
-          });
-          if(low_stock != null){
-            let match = false;
-            let selected_variant = document.querySelectorAll("#product-select option").forEach(item => {
-              if(item.value == variant.id){
-                if(item.dataset.qty <= 3){
-                  low_stock.innerText.replace("{item}", item.dataset.qty);
-                  low_stock.style.display = "block";
-                  match = true;
-                }
+      let selectCallback = (variant, selector) => {
+        let atc = document.querySelector(".main-product--submit");
+        if(variant != null){
+            atc.innerText = variant.available ? atc.getAttribute("data-instock") : atc.getAttribute("data-soldout");
+            if(variant.featured_image != null){
+              if(count > 0){
+                let slideIndex = document.querySelector(`.product-single__media[data-media-id="${variant.featured_media.id}"]`).closest(".carousel-cell").getAttribute("data-index");
+                var flkty = new Flickity('.main-product__media-wrapper');
+                flkty.select(parseInt(slideIndex));
               }
-            });
-            if(!match){
-              low_stock.style.display = "none";
+              else{
+                count++;
+              }
             }
-          }
-      }
-      else{
-          atc.innerText = "Unavailable";
-      }
-  }
-  
-  new Shopify.OptionSelectors('product-select', {
-      product: {{ product | json }},
+            document.querySelectorAll(".main-product__options--selected").forEach((item, index) => {
+                item.innerText = variant.options[index];
+            });
+            if(low_stock != null){
+              let match = false;
+              let selected_variant = document.querySelectorAll("#product-select option").forEach(item => {
+                if(item.value == variant.id){
+                  if(item.dataset.qty <= 3){
+                    low_stock.innerText.replace("{item}", item.dataset.qty);
+                    low_stock.style.display = "block";
+                    match = true;
+                  }
+                }
+              });
+              if(!match){
+                low_stock.style.display = "none";
+              }
+            }
+        }
+        else{
+            atc.innerText = "Unavailable";
+        }
+    }
+    
+    new Shopify.OptionSelectors('product-select', {
+        product: {{ product | json }},
   onVariantSelected: selectCallback,
-      enableHistoryState: true
-  });</script>
+        enableHistoryState: true
+    });</script>
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
 

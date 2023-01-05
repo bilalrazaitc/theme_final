@@ -50,6 +50,41 @@
     ]
   },
   {
+    "name": "Predictive search",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Predictive search"
+      },
+      {
+        "type": "link_list",
+        "id": "predictive_search_linklist",
+        "label": "Predictive search menu",
+        "info": "This menu show up when there is no keyword type in search."
+      },
+      {
+        "type": "select",
+        "id": "predictive_search_options",
+        "label": "Show/Hide predictive search options",
+        "options": [
+          {
+            "value": "products",
+            "label": "Show products only"
+          },
+          {
+            "value": "products_collections",
+            "label": "Show products and collections"
+          },
+          {
+            "value": "all",
+            "label": "Show all"
+          }
+        ],
+        "default": "all"
+      }
+    ]
+  },
+  {
     "name": "Colors",
     "settings": [
       {

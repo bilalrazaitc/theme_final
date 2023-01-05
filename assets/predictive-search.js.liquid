@@ -1,6 +1,7 @@
 let search_button = document.querySelector(".header__icons--search");
 let search_close = document.querySelector(".search__close");
 let search_wrapper = document.querySelector(".search");
+let search_menu = document.querySelector(".search__menu");
 search_button.addEventListener("click", e => {
   search_wrapper.style.display = "block";
   showOverlay();
@@ -20,8 +21,11 @@ let search_input = document.querySelector(".search__input");
 let search_submit = document.querySelector(".search__submit");
 let searchRequestResponse;
 search_input.addEventListener("input", delay(function(e) {
+  search_content.innerHTML = `<span class="predictive-search__loader"></span>`;
   if (search_input.value.length > 1) {
-    search_content.innerHTML = `<span class="predictive-search__loader"></span>`;
+    if (search_menu != null) {
+      search_menu.classList.add("inactive");
+    }
     fetch(window.Shopify.routes.root + `search/suggest?q=${
       search_input.value
     }&resources[type]=product,page,collection,article&resources[options][unavailable_products]=last&section_id=predictive-search`)
@@ -56,6 +60,9 @@ search_input.addEventListener("input", delay(function(e) {
   } else {
     search_content.classList.remove("active");
     search_submit.classList.remove("active");
+    if (search_menu != null) {
+      search_menu.classList.remove("inactive");
+    }
   }
 }, 500));
 

@@ -2,7 +2,6 @@ let drawer = document.querySelector("[data-cart-drawer]");
 let drawer_total_wrapper = document.querySelector("[data-cart-drawer-total-wrapper]");
 let drawer_total = document.querySelector("[data-cart-drawer-total]");
 let drawer_count = document.querySelector("[data-cart-drawer-count]");
-let drawer_overlay = document.querySelector(".cart-drawer__overlay");
 let drawer_ajax = document.querySelector("[data-cart-drawer-ajax]");
 let drawer_close = document.querySelector("[data-cart-drawer-close]");
 let drawer_open = document.querySelector(".header__icons--cart");
@@ -24,8 +23,6 @@ for (dicountEvent of dicountEvents) {
 }
 
 drawer_close.addEventListener("click", () => {
-
-  // drawer_overlay.style.display = "none";
   drawer.classList.remove("active");
   hideOverlay();
   setTimeout(() => {
@@ -39,7 +36,6 @@ drawer_open.addEventListener("click", () => {
     drawer.classList.add("active");
   }, 10);
 
-  // drawer_overlay.style.display = "none";
 });
 
 
@@ -97,7 +93,6 @@ let cartItemGrid = (item, index, disc) => {
 
     }
   }
-  console.warn(item.properties, properties);
   return `<div class="cart-drawer__grid" data-item-id="${index}">
                 <div class="cart-drawer__grid-image">
                     <img src="${
@@ -147,8 +142,11 @@ ${discounts}</p>`
 
 
 let cartRefresh = () => {
-  drawer.classList.add("active");
-  drawer_overlay.style.display = "block";
+  drawer.style.display = "block";
+  showOverlay();
+  setTimeout(() => {
+    drawer.classList.add("active");
+  }, 10);
   fetch('/cart.js').then(cart => cart.json()).then(cart => {
     let cartItems = ``;
     cartUpdateTotal(cart.total_price, cart.item_count);
@@ -339,6 +337,7 @@ let forms = document.querySelectorAll('form[action="/cart/add"]');
 forms.forEach(function(form) {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
+    console.log("asdasdsad");
     let data = new URLSearchParams(new FormData(form));
     fetch('/cart/add.js', {
       method: 'POST',

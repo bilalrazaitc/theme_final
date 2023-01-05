@@ -50,7 +50,13 @@
 
 {% endstyle %}
 
+    
+    {{ 'header.css' | asset_url | stylesheet_tag }}
+    {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'predictive-search.css' | asset_url | stylesheet_tag }}
+    {{ 'header-mobile.css' | asset_url | stylesheet_tag }}
     {{ 'global.css' | asset_url | stylesheet_tag }}
+    {{ 'footer.css' | asset_url | stylesheet_tag }}
 
     {% render 'meta-tags' %}
 
@@ -59,6 +65,10 @@
     <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'drawer.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'header-mobile.js' | asset_url }}" defer="defer"></script>
+    {%- if request.design_mode -%}
+      <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
     {{ content_for_header }}
   </head>
 
