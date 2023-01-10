@@ -190,11 +190,6 @@
       {%- endfor -%}
 
 
-      <div class="main-product__badges">
-        <p class="main-product__low-item-count"></p>
-      </div>
-
-
     </div>
   </div>
 </div>
@@ -356,49 +351,49 @@
 <script defer="defer">
   let low_stock = document.querySelector(".product__low-stock");
   let count = 0;
-      let selectCallback = (variant, selector) => {
-        let atc = document.querySelector(".main-product--submit");
-        if(variant != null){
-            atc.innerText = variant.available ? atc.getAttribute("data-instock") : atc.getAttribute("data-soldout");
-            if(variant.featured_image != null){
-              if(count > 0){
-                let slideIndex = document.querySelector(`.product-single__media[data-media-id="${variant.featured_media.id}"]`).closest(".carousel-cell").getAttribute("data-index");
-                var flkty = new Flickity('.main-product__media-wrapper');
-                flkty.select(parseInt(slideIndex));
-              }
-              else{
-                count++;
-              }
-            }
-            document.querySelectorAll(".main-product__options--selected").forEach((item, index) => {
-                item.innerText = variant.options[index];
-            });
-            if(low_stock != null){
-              let match = false;
-              let selected_variant = document.querySelectorAll("#product-select option").forEach(item => {
-                if(item.value == variant.id){
-                  if(item.dataset.qty <= 3){
-                    low_stock.innerText.replace("{item}", item.dataset.qty);
-                    low_stock.style.display = "block";
-                    match = true;
+                    let selectCallback = (variant, selector) => {
+                      let atc = document.querySelector(".main-product--submit");
+                      if(variant != null){
+                          atc.innerText = variant.available ? atc.getAttribute("data-instock") : atc.getAttribute("data-soldout");
+                          if(variant.featured_image != null){
+                            if(count > 0){
+                              let slideIndex = document.querySelector(`.product-single__media[data-media-id="${variant.featured_media.id}"]`).closest(".carousel-cell").getAttribute("data-index");
+                              var flkty = new Flickity('.main-product__media-wrapper');
+                              flkty.select(parseInt(slideIndex));
+                            }
+                            else{
+                              count++;
+                            }
+                          }
+                          document.querySelectorAll(".main-product__options--selected").forEach((item, index) => {
+                              item.innerText = variant.options[index];
+                          });
+                          if(low_stock != null){
+                            let match = false;
+                            let selected_variant = document.querySelectorAll("#product-select option").forEach(item => {
+                              if(item.value == variant.id){
+                                if(item.dataset.qty <= 3){
+                                  low_stock.innerText = low_stock.innerText.replace("{item}", item.dataset.qty);
+                                  low_stock.style.display = "block";
+                                  match = true;
+                                }
+                              }
+                            });
+                            if(!match){
+                              low_stock.style.display = "none";
+                            }
+                          }
+                      }
+                      else{
+                          atc.innerText = "Unavailable";
+                      }
                   }
-                }
-              });
-              if(!match){
-                low_stock.style.display = "none";
-              }
-            }
-        }
-        else{
-            atc.innerText = "Unavailable";
-        }
-    }
-    
-    new Shopify.OptionSelectors('product-select', {
-        product: {{ product | json }},
+                  
+                  new Shopify.OptionSelectors('product-select', {
+                      product: {{ product | json }},
   onVariantSelected: selectCallback,
-        enableHistoryState: true
-    });</script>
+                      enableHistoryState: true
+                  });</script>
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
 
@@ -583,6 +578,28 @@
             "type": "text",
             "id": "text",
             "default": "Free worldwide shipping",
+            "label": "Text"
+          }
+        ]
+      }, {
+        "type": "accordion",
+        "name": "Accordion",
+        "settings": [
+          {
+            "type": "text",
+            "id": "fa",
+            "default": "globe",
+            "label": "Font Awesome",
+            "info": "Type here font icon name"
+          }, {
+            "type": "text",
+            "id": "title",
+            "default": "Your title here",
+            "label": "Title"
+          }, {
+            "type": "textarea",
+            "id": "text",
+            "default": "Your text here",
             "label": "Text"
           }
         ]
