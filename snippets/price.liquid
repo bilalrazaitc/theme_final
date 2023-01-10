@@ -17,17 +17,18 @@
     assign money_price = 'products.product.price.from_price_html' | t: price: money_price
   endif
 -%}
-        {{ money_price }}
-      {%- unless product.price_varies == false and product.compare_at_price_varies %}
-            {% if settings.currency_code_enabled %}
-              {{ compare_at_price | money_with_currency }}
-            {% else %}
-              {{ compare_at_price | money }}
-            {% endif %}
-      {%- endunless -%}
-        {{ money_price }}
-        {{- product.selected_or_first_available_variant.unit_price | money -}}
-          {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
-            {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
-          {%- endif -%}
-          {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+<p class="main-product__price">
+  {%- unless product.price_varies == false and product.compare_at_price_varies %}
+    {% if settings.currency_code_enabled %}
+      <strike>{{ compare_at_price | money_with_currency }}</strike>
+    {% else %}
+      <strike>{{ compare_at_price | money }}</strike>
+    {% endif %}
+  {%- endunless -%}
+  <span>{{ money_price }}</span>
+</p>
+{{- product.selected_or_first_available_variant.unit_price | money -}}
+{%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+  {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+{%- endif -%}
+{{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
