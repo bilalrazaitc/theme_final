@@ -1,7 +1,7 @@
 <div class="list-collection">
   <div class="list-collection__container">
     <h1 class="text--center heading--underline mb--30">{{ section.settings.heading }}</h1>
-    {%- paginate collections by 6 -%}
+    {%- paginate collections by section.settings.per_page -%}
       <div class="list-collection__flex-container" id="AjaxinateContainer">
         {% for collection in collections %}
           <div class="list-collection__item mt--30">
@@ -20,56 +20,66 @@
           </div>
         {% endfor %}
       </div>
-      {% comment %} {% render 'pagination', paginate: paginate %} {% endcomment %}
-      <div id="AjaxinatePagination">
-        {% if paginate.next %}
-          <a href="{{ paginate.next.url }}"></a>
-        {% endif %}
-      </div>
+      {%- if section.settings.pagination == 'infinite' -%}
+        <div id="AjaxinatePagination">
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}"></a>
+          {% endif %}
+        </div>
+      {%- else -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endif -%}
     {%- endpaginate -%}
   </div>
 </div>
 
-{{ 'ajaxinate.min.js' | asset_url | script_tag }}
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var endlessScroll = new Ajaxinate({loadingText: ""});
-  });
-</script>
+{%- if section.settings.pagination == 'infinite' -%}
+  {{ 'ajaxinate.min.js' | asset_url | script_tag }}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var endlessScroll = new Ajaxinate({
+        loadingText: "",
+        offset: 500
+        });
+    });
+  </script>
+  <style>
+    #AjaxinatePagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #AjaxinatePagination a {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: block;
+      margin-top: 50px;
+    }
+    #AjaxinatePagination a::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 5px solid black;
+      border-left: 5px solid transparent;
+      border-radius: 50%;
+      animation: ajaxinateLoader 1s linear infinite;
+    }
+    @keyframes ajaxinateLoader {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+{%- endif -%}
 
 <style>
-  #AjaxinatePagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #AjaxinatePagination a {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    display: block;
-    margin-top: 50px;
-  }
-  #AjaxinatePagination a::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 5px solid black;
-    border-left: 5px solid transparent;
-    border-radius: 50%;
-    animation: ajaxinateLoader 1s linear infinite;
-  }
-  @keyframes ajaxinateLoader {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
   .list-collection {}
   .list-collection__container {
     padding: 45px;
@@ -138,18 +148,39 @@
         "label": "Heading",
         "default": "Collection List"
       }, {
-        "type": "collection_list",
-        "id": "collections",
-        "label": "Select Collections"
+        "type": "select",
+        "id": "pagination",
+        "label": "Pagination style",
+        "options": [
+          {
+            "value": "infinite",
+            "label": "Infinite scroll"
+          }, {
+            "value": "pages",
+            "label": "Pages Link"
+          }
+        ],
+        "default": "pages"
       }, {
-        "type": "text",
-        "id": "link_text",
-        "label": "Link Text",
-        "default": "Shop Collections"
-      }, {
-        "type": "url",
-        "id": "link",
-        "label": "Link"
+        "type": "select",
+        "id": "per_page",
+        "label": "Collections per page",
+        "options": [
+          {
+            "value": "12",
+            "label": "12"
+          }, {
+            "value": "24",
+            "label": "24"
+          }, {
+            "value": "36",
+            "label": "36"
+          }, {
+            "value": "48",
+            "label": "48"
+          }
+        ],
+        "default": "12"
       }
     ]
   }

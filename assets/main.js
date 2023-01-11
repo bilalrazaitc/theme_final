@@ -191,5 +191,11 @@ collage_overlay.forEach(function(overlay){
 
 
 
+    var flky = new Flickity( '.main-product__media-wrapper', {
+        pageDots: true,
+      prevNextButtons: true,
+          adaptiveHeight: true,
+          resize: true
+    })
 
-    
+
