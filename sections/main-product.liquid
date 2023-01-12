@@ -414,7 +414,7 @@ html{
           {%- when 'low_stock' -%}
           <p class="product__low-stock" {% if product.selected_or_first_available_variant.inventory_quantity <= 3 %}style="display: none;"{% endif %}>
             <i class="fa fa-{{- block.settings.fa -}}"></i>
-            {{ block.settings.text }}</p>
+            {{ block.settings.text }}</p> 
           {%- when 'icon_with_text' -%}
           <p class="product__icon-with-text">
             <i class="fa fa-{{- block.settings.fa -}}"></i>
