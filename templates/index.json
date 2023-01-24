@@ -2,6 +2,32 @@
   "sections": {
     "main": {
       "type": "image-with-text",
+      "blocks": {
+        "db894238-3483-4862-bc5f-88e3a33b8a6d": {
+          "type": "block",
+          "settings": {
+            "switch": false,
+            "title": "Your title here",
+            "subtitle": "Your subtitle here",
+            "link_text": "Your text here",
+            "link": ""
+          }
+        },
+        "ab4c5129-b796-4abf-a21e-c2b642841082": {
+          "type": "block",
+          "settings": {
+            "switch": false,
+            "title": "Your title here",
+            "subtitle": "Your subtitle here",
+            "link_text": "Your text here",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "db894238-3483-4862-bc5f-88e3a33b8a6d",
+        "ab4c5129-b796-4abf-a21e-c2b642841082"
+      ],
       "settings": {
       }
     }
