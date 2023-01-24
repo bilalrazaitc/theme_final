@@ -8,8 +8,18 @@
           "settings": {
           }
         },
+        "7309d7c5-bc29-4570-8737-dcf09384d322": {
+          "type": "rating",
+          "settings": {
+          }
+        },
         "941da72d-0bbd-48a1-b901-5891cc99dcaf": {
           "type": "price",
+          "settings": {
+          }
+        },
+        "c15c444e-cd9d-4061-a25c-5945fbf9b613": {
+          "type": "description",
           "settings": {
           }
         },
@@ -31,14 +41,23 @@
           "type": "quantity_selector",
           "settings": {
           }
+        },
+        "8a3e41dc-4946-4318-b42b-f5ac6e00c4c3": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
         }
       },
       "block_order": [
         "0bb94bdf-dacf-46b9-9118-4612d13cfd01",
+        "7309d7c5-bc29-4570-8737-dcf09384d322",
         "941da72d-0bbd-48a1-b901-5891cc99dcaf",
+        "c15c444e-cd9d-4061-a25c-5945fbf9b613",
         "2bf2fc4e-6031-4ca6-8bc3-ec65c59c629b",
         "4f45dd62-ab98-4128-94ab-beca9f0b01ef",
-        "ab88564e-be78-4326-9dc0-4fb88d56295c"
+        "ab88564e-be78-4326-9dc0-4fb88d56295c",
+        "8a3e41dc-4946-4318-b42b-f5ac6e00c4c3"
       ],
       "settings": {
         "enable_sticky_info": false,
