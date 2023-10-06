@@ -7,6 +7,7 @@
           "type": "block",
           "settings": {
             "switch": false,
+            "image": "shopify:\/\/shop_images\/kanpachiCoast_9adc57af-7e78-4ab1-b24f-85c0d4a3ce9b.jpg",
             "title": "Your title here",
             "subtitle": "Your subtitle here",
             "link_text": "Your text here",
@@ -16,7 +17,8 @@
         "ab4c5129-b796-4abf-a21e-c2b642841082": {
           "type": "block",
           "settings": {
-            "switch": false,
+            "switch": true,
+            "image": "shopify:\/\/shop_images\/blueoceanmariculture3_b7236d34-6baf-4892-8ac7-af4ceafc0571.jpg",
             "title": "Your title here",
             "subtitle": "Your subtitle here",
             "link_text": "Your text here",
@@ -30,9 +32,22 @@
       ],
       "settings": {
       }
+    },
+    "487d5804-b8f8-4f07-a589-bdb88d718319": {
+      "type": "image-with-text-overlay",
+      "settings": {
+        "desktop_image": "shopify:\/\/shop_images\/blueoceanmariculture2_8854646f-e875-435d-a11f-f6a4e0ee5ce3.jpg",
+        "title": "Your title here",
+        "subtitle": "Your subtitle here",
+        "link_text": "Your text here",
+        "link": "",
+        "overlay_align": "center",
+        "overlay_content_align": "left"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "487d5804-b8f8-4f07-a589-bdb88d718319"
   ]
 }
