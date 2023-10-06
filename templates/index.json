@@ -68,12 +68,28 @@
             "text": "Your text here",
             "rating": 5
           }
+        },
+        "ba4ea433-442e-421b-9fa5-3e8530a0e5b7": {
+          "type": "block",
+          "settings": {
+            "text": "Your text here",
+            "rating": 5
+          }
+        },
+        "f927d4d0-2179-4b5e-827d-c54a50f9e6dd": {
+          "type": "block",
+          "settings": {
+            "text": "Your text here",
+            "rating": 5
+          }
         }
       },
       "block_order": [
         "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-1",
         "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-2",
-        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-3"
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-3",
+        "ba4ea433-442e-421b-9fa5-3e8530a0e5b7",
+        "f927d4d0-2179-4b5e-827d-c54a50f9e6dd"
       ],
       "settings": {
         "heading": "Your heading here",
