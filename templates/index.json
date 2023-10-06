@@ -1,5 +1,19 @@
 {
   "sections": {
+    "a3a8288a-3f13-40d0-875a-6a5cbfc4fa6a": {
+      "type": "video-with-text-overlay",
+      "settings": {
+        "video_url": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc",
+        "video": "",
+        "heading": "Your heading here",
+        "heading_size": "55px",
+        "heading_underline": true,
+        "subheading": "Your subheading here",
+        "link_text": "Your text here",
+        "link": "",
+        "overlay_content_align": "left"
+      }
+    },
     "main": {
       "type": "image-with-text",
       "blocks": {
@@ -105,6 +119,7 @@
     }
   },
   "order": [
+    "a3a8288a-3f13-40d0-875a-6a5cbfc4fa6a",
     "main",
     "487d5804-b8f8-4f07-a589-bdb88d718319",
     "6076ac18-a2f2-4d52-a8f5-f75dc8f653a2",
