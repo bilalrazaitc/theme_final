@@ -45,6 +45,41 @@
         "overlay_content_align": "left"
       }
     },
+    "6076ac18-a2f2-4d52-a8f5-f75dc8f653a2": {
+      "type": "testimonial",
+      "blocks": {
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-1": {
+          "type": "block",
+          "settings": {
+            "text": "Your text here",
+            "rating": 5
+          }
+        },
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-2": {
+          "type": "block",
+          "settings": {
+            "text": "Your text here",
+            "rating": 5
+          }
+        },
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-3": {
+          "type": "block",
+          "settings": {
+            "text": "Your text here",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-1",
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-2",
+        "template--17574116131129__6076ac18-a2f2-4d52-a8f5-f75dc8f653a2-block-3"
+      ],
+      "settings": {
+        "heading": "Your heading here",
+        "subheading": "Your subheading here"
+      }
+    },
     "a109435f-3393-4570-bd0f-4fab32b1628c": {
       "type": "newsletter",
       "settings": {
@@ -56,6 +91,7 @@
   "order": [
     "main",
     "487d5804-b8f8-4f07-a589-bdb88d718319",
+    "6076ac18-a2f2-4d52-a8f5-f75dc8f653a2",
     "a109435f-3393-4570-bd0f-4fab32b1628c"
   ]
 }
