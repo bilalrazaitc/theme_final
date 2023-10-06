@@ -11,6 +11,17 @@
       },
       "footer": {
         "type": "footer",
+        "blocks": {
+          "7280c0fb-f5ef-40cf-a46f-2fd254427321": {
+            "type": "links",
+            "settings": {
+              "menu": "footer"
+            }
+          }
+        },
+        "block_order": [
+          "7280c0fb-f5ef-40cf-a46f-2fd254427321"
+        ],
         "settings": {
         }
       }
