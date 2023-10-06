@@ -44,10 +44,18 @@
         "overlay_align": "center",
         "overlay_content_align": "left"
       }
+    },
+    "a109435f-3393-4570-bd0f-4fab32b1628c": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Your heading here",
+        "subheading": "Your subheading here"
+      }
     }
   },
   "order": [
     "main",
-    "487d5804-b8f8-4f07-a589-bdb88d718319"
+    "487d5804-b8f8-4f07-a589-bdb88d718319",
+    "a109435f-3393-4570-bd0f-4fab32b1628c"
   ]
 }
