@@ -12,7 +12,7 @@
 {% endif %}
 
 {% assign menu = linklists[section.settings.menu].links %}
-{% capture 'header__menu' %}
+{% capture header__menu %}
   <nav class="header__menu">
     <ul class="header__menu-ul">
       {% for link in menu %}
@@ -110,12 +110,12 @@
     </ul>
   </nav>
 {% endcapture %}
-{% capture 'header__logo' %}
+{% capture header__logo %}
   <h3 class="header__logo">
     {{ shop.name }}
   </h3>
 {% endcapture %}
-{% capture 'header__icons' %}
+{% capture header__icons %}
   <div class="header__icons">
     <span class="header__icon header__icons--search">
       {%- render 'icon-search' -%}
@@ -132,7 +132,7 @@
     </span>
   </div>
 {% endcapture %}
-{% capture 'header__mobile' %}
+{% capture header__mobile %}
   <div class="header__mobile-wrapper">
     <span class="header__mobile--icon">
       {%- render 'icon-hamburger' -%}
@@ -197,4 +197,22 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% capture 'header__menu' %}"
+  to: "{% capture header__menu %}"
+  position: 425..451
+- from: "{% capture 'header__logo' %}"
+  to: "{% capture header__logo %}"
+  position: 5458..5484
+- from: "{% capture 'header__icons' %}"
+  to: "{% capture header__icons %}"
+  position: 5558..5585
+- from: "{% capture 'header__mobile' %}"
+  to: "{% capture header__mobile %}"
+  position: 6142..6170
+{%- endcomment -%}
